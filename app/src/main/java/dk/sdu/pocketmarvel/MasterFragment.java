@@ -31,7 +31,5 @@ public class MasterFragment extends Fragment {
 
     public void setMasterAdapter(RecyclerView.Adapter masterAdapter) {
         this.masterAdapter = masterAdapter;
-
     }
-
 }

@@ -20,7 +20,11 @@ public class CharacterListViewModel extends ViewModel {
     private LiveData<DataFetchError> errorLiveData;
     private ExecutorService fetchExecutor;
 
-    public void init() {
+    public CharacterListViewModel() {
+        init();
+    }
+
+    public final void init() {
         fetchExecutor = Executors.newSingleThreadExecutor();
 
         PagedList.Config pagedConfig = new PagedList.Config.Builder()

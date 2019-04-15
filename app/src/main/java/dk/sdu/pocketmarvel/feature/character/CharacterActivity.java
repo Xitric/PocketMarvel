@@ -27,8 +27,8 @@ public class CharacterActivity extends MasterDetailActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         characterListViewModel = ViewModelProviders.of(this).get(CharacterListViewModel.class);
-        characterListViewModel.init();
         characterListViewModel.getCharactersLiveData().observe(this, characters ->
                 characterAdapter.submitList(characters));
 

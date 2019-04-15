@@ -8,20 +8,15 @@ import android.support.v7.widget.RecyclerView;
 
 public abstract class MasterDetailActivity extends AppCompatActivity implements OnAdapterSelectionListener {
 
-    private FragmentTransaction fragmentTransaction;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master_detail);
 
-        if (savedInstanceState != null) {
-            return;
-        }
         MasterFragment masterFragment = new MasterFragment();
         masterFragment.setMasterAdapter(getMasterAdapter());
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.vg_primary_fragment, masterFragment)
+                .replace(R.id.vg_primary_fragment, masterFragment)
                 .commit();
     }
 
@@ -34,6 +29,9 @@ public abstract class MasterDetailActivity extends AppCompatActivity implements 
         }
     }
 
+    /**
+     * Replace the master fragment with a detail fragment.
+     */
     private void pushDetailFragment() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.vg_primary_fragment, getDetailFragment())
@@ -41,6 +39,9 @@ public abstract class MasterDetailActivity extends AppCompatActivity implements 
                 .commit();
     }
 
+    /**
+     * Show a detail fragment besides the master fragment.
+     */
     private void showDetailFragment() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.vg_detail_fragment, getDetailFragment())
