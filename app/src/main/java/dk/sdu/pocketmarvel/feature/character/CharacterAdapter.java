@@ -1,29 +1,39 @@
 package dk.sdu.pocketmarvel.feature.character;
 
+import android.arch.paging.PagedListAdapter;
 import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.List;
-
-import dk.sdu.pocketmarvel.ObservableSelectionAdapter;
+import dk.sdu.pocketmarvel.OnAdapterSelectionListener;
 import dk.sdu.pocketmarvel.R;
 import dk.sdu.pocketmarvel.repository.api.model.Character;
 
-public class CharacterAdapter extends ObservableSelectionAdapter<CharacterAdapter.CharacterViewHolder> {
+public class CharacterAdapter extends PagedListAdapter<Character, CharacterAdapter.CharacterViewHolder> {
 
-    private List<Character> characterList;
+    //Used by the PagedListAdapter to determine equality between versions of Character objects. For
+    //instance, two Character objects might represent the same Character, but one was fetched more
+    //previously than the other, and thus their contents differ.
+    private static final DiffUtil.ItemCallback<Character> characterDiffCallback = new DiffUtil.ItemCallback<Character>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Character a, @NonNull Character b) {
+            return a.getId() == b.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Character a, @NonNull Character b) {
+            return a.equals(b);
+        }
+    };
+    private final OnAdapterSelectionListener adapterSelectionListener;
 
     public CharacterAdapter(OnAdapterSelectionListener adapterSelectionListener) {
-        super(adapterSelectionListener);
-    }
-
-    public void setCharacterList(List<Character> characterList) {
-        this.characterList = characterList;
-        notifyDataSetChanged();
+        super(characterDiffCallback);
+        this.adapterSelectionListener = adapterSelectionListener;
     }
 
     @NonNull
@@ -34,23 +44,21 @@ public class CharacterAdapter extends ObservableSelectionAdapter<CharacterAdapte
     }
 
     @Override
-    public int getItemCount() {
-        if (characterList == null) {
-            return 0;
-        }
-        return characterList.size();
-    }
-
-    @Override
     public void onBindViewHolder(@NonNull CharacterViewHolder characterViewHolder, int i) {
-        characterViewHolder.character.setText(characterList.get(i).getName());
+        Character character = getItem(i);
+        if (character == null) {
+            //Still fetching, show placeholder
+            characterViewHolder.character.setText("Please wait...");
+        } else {
+            characterViewHolder.character.setText(character.getName());
+        }
     }
 
     protected class CharacterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView character;
 
-        public CharacterViewHolder(@NonNull View itemView) {
+        CharacterViewHolder(@NonNull View itemView) {
             super(itemView);
             character = itemView.findViewById(R.id.tv_character_list_item);
             itemView.setOnClickListener(this);
@@ -58,7 +66,7 @@ public class CharacterAdapter extends ObservableSelectionAdapter<CharacterAdapte
 
         @Override
         public void onClick(View v) {
-            getAdapterSelectionListener().onSelected(getAdapterPosition());
+            adapterSelectionListener.onSelected(getAdapterPosition());
         }
     }
 }

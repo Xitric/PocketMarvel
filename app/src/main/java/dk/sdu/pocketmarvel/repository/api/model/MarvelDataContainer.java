@@ -9,49 +9,49 @@ public class MarvelDataContainer<T> {
 
     @SerializedName("offset")
     @Expose
-    private String offset;
+    private int offset;
     @SerializedName("limit")
     @Expose
-    private String limit;
+    private int limit;
     @SerializedName("total")
     @Expose
-    private String total;
+    private int total;
     @SerializedName("count")
     @Expose
-    private String count;
+    private int count;
     @SerializedName("results")
     @Expose
     private List<T> results = null;
 
-    public String getOffset() {
+    public int getOffset() {
         return offset;
     }
 
-    public void setOffset(String offset) {
+    public void setOffset(int offset) {
         this.offset = offset;
     }
 
-    public String getLimit() {
+    public int getLimit() {
         return limit;
     }
 
-    public void setLimit(String limit) {
+    public void setLimit(int limit) {
         this.limit = limit;
     }
 
-    public String getTotal() {
+    public int getTotal() {
         return total;
     }
 
-    public void setTotal(String total) {
+    public void setTotal(int total) {
         this.total = total;
     }
 
-    public String getCount() {
+    public int getCount() {
         return count;
     }
 
-    public void setCount(String count) {
+    public void setCount(int count) {
         this.count = count;
     }
 

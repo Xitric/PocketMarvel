@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import dk.sdu.pocketmarvel.MasterDetailActivity;
 
@@ -27,6 +28,11 @@ public class CharacterActivity extends MasterDetailActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         characterListViewModel = ViewModelProviders.of(this).get(CharacterListViewModel.class);
-        characterListViewModel.getLiveCharacters().observe(this, characters -> characterAdapter.setCharacterList(characters));
+        characterListViewModel.init();
+        characterListViewModel.getCharactersLiveData().observe(this, characters ->
+                characterAdapter.submitList(characters));
+
+        characterListViewModel.getErrorLiveData().observe(this, error ->
+                Toast.makeText(this, error.toString(), Toast.LENGTH_LONG).show());
     }
 }

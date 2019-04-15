@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 
-public abstract class MasterDetailActivity extends AppCompatActivity implements ObservableSelectionAdapter.OnAdapterSelectionListener {
+public abstract class MasterDetailActivity extends AppCompatActivity implements OnAdapterSelectionListener {
 
     private FragmentTransaction fragmentTransaction;
 

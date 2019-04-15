@@ -4,12 +4,13 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Character {
 
     @SerializedName("id")
     @Expose
-    private String id;
+    private int id;
     @SerializedName("name")
     @Expose
     private String name;
@@ -41,11 +42,11 @@ public class Character {
     @Expose
     private SeriesList series;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -129,4 +130,20 @@ public class Character {
         this.series = series;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Character character = (Character) o;
+        return id == character.id &&
+                Objects.equals(name, character.name) &&
+                Objects.equals(description, character.description) &&
+                Objects.equals(modified, character.modified) &&
+                Objects.equals(resourceURI, character.resourceURI);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, modified, resourceURI);
+    }
 }

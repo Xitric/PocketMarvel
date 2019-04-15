@@ -1,61 +1,62 @@
 package dk.sdu.pocketmarvel.feature.character;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
-import android.os.AsyncTask;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PagedList;
 
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import dk.sdu.pocketmarvel.repository.api.MarvelClient;
-import dk.sdu.pocketmarvel.repository.api.MarvelService;
+import dk.sdu.pocketmarvel.repository.DataFetchError;
 import dk.sdu.pocketmarvel.repository.api.model.Character;
-import dk.sdu.pocketmarvel.repository.api.model.MarvelDataWrapper;
+import dk.sdu.pocketmarvel.repository.character.CharacterDataSource;
+import dk.sdu.pocketmarvel.repository.character.CharacterDataSourceFactory;
 
 public class CharacterListViewModel extends ViewModel {
-    private MutableLiveData<List<Character>> liveCharacters;
 
-    public LiveData<List<Character>> getLiveCharacters() {
-        return liveCharacters;
+    private LiveData<PagedList<Character>> charactersLiveData;
+    private LiveData<DataFetchError> errorLiveData;
+    private ExecutorService fetchExecutor;
+
+    public void init() {
+        fetchExecutor = Executors.newSingleThreadExecutor();
+
+        PagedList.Config pagedConfig = new PagedList.Config.Builder()
+                .setPageSize(20)
+                .setInitialLoadSizeHint(60)
+                .setPrefetchDistance(20)
+                .setEnablePlaceholders(true)
+                .build();
+
+        CharacterDataSourceFactory dataSourceFactory = new CharacterDataSourceFactory();
+
+        errorLiveData = Transformations.switchMap(dataSourceFactory.getSourceLiveData(),
+                CharacterDataSource::getErrorLiveData);
+
+        charactersLiveData = new LivePagedListBuilder<>(dataSourceFactory, pagedConfig)
+                .setFetchExecutor(fetchExecutor)
+                .build();
     }
 
-    public CharacterListViewModel() {
-        liveCharacters = new MutableLiveData<>();
-        CharacterTask characterTask = new CharacterTask(liveCharacters);
-        characterTask.execute();
+    /**
+     * Get a list of all {@link Character Characters} that supports paging. This can be used to
+     * avoid loading an excessively long list of Characters into memory.
+     *
+     * @return A list of Characters that supports paging.
+     */
+    public LiveData<PagedList<Character>> getCharactersLiveData() {
+        return charactersLiveData;
     }
 
-    private static class CharacterTask extends AsyncTask<Void, Void, List<Character>> {
+    public LiveData<DataFetchError> getErrorLiveData() {
+        return errorLiveData;
+    }
 
-        private WeakReference<MutableLiveData<List<Character>>> liveCharacters;
-
-        public CharacterTask(MutableLiveData<List<Character>> liveCharacters) {
-            this.liveCharacters = new WeakReference<>(liveCharacters);
-        }
-
-        @Override
-        protected List<Character> doInBackground(Void... voids) {
-            MarvelService service = MarvelClient.getService();
-            try {
-                MarvelDataWrapper<Character> wrapper = service.getCharacters()
-                        .execute().body();
-
-                return wrapper.getData().getResults();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(List<Character> characters) {
-            MutableLiveData<List<Character>> characterList = liveCharacters.get();
-            if (characterList != null) {
-                characterList.setValue(characters);
-            }
-        }
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        fetchExecutor.shutdownNow();
     }
 }
