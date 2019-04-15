@@ -7,15 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
+
 import dk.sdu.pocketmarvel.ObservableSelectionAdapter;
 import dk.sdu.pocketmarvel.R;
+import dk.sdu.pocketmarvel.repository.api.model.Character;
 
 public class CharacterAdapter extends ObservableSelectionAdapter<CharacterAdapter.CharacterViewHolder> {
 
-    private String[] characters = {"1", "2", "hej"};
+    private List<Character> characterList;
 
     public CharacterAdapter(OnAdapterSelectionListener adapterSelectionListener) {
         super(adapterSelectionListener);
+    }
+
+    public void setCharacterList(List<Character> characterList) {
+        this.characterList = characterList;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -27,12 +35,15 @@ public class CharacterAdapter extends ObservableSelectionAdapter<CharacterAdapte
 
     @Override
     public int getItemCount() {
-        return characters.length;
+        if (characterList == null) {
+            return 0;
+        }
+        return characterList.size();
     }
 
     @Override
     public void onBindViewHolder(@NonNull CharacterViewHolder characterViewHolder, int i) {
-        characterViewHolder.character.setText(characters[i]);
+        characterViewHolder.character.setText(characterList.get(i).getName());
     }
 
     protected class CharacterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

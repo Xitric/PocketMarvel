@@ -24,6 +24,10 @@ public interface MarvelService {
     @GET("v1/public/characters")
     Call<MarvelDataWrapper<Character>> getCharacter(@Query("name") String name);
 
+    @GET("v1/public/characters")
+    Call<MarvelDataWrapper<Character>> getCharacters();
+
+
     @GET("v1/public/events")
     Call<MarvelDataWrapper<Event>> getEvent(@Query("name") String name);
 }
