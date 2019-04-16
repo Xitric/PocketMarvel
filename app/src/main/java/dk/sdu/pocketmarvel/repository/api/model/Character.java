@@ -8,10 +8,13 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
 import java.util.Objects;
 
+import dk.sdu.pocketmarvel.repository.Expireable;
+
 @Entity
-public class Character {
+public class Character implements Expireable {
 
     @SerializedName("id")
     @Expose
@@ -36,7 +39,7 @@ public class Character {
     @Expose
     @Embedded
     private Image thumbnail;
-//    @SerializedName("comics")
+    //    @SerializedName("comics")
 //    @Expose
 //    private ComicList comics;
 //    @SerializedName("stories")
@@ -48,6 +51,7 @@ public class Character {
 //    @SerializedName("series")
 //    @Expose
 //    private SeriesList series;
+    private Date expiration;
 
     public int getId() {
         return id;
@@ -107,7 +111,7 @@ public class Character {
         this.thumbnail = thumbnail;
     }
 
-//    public ComicList getComics() {
+    //    public ComicList getComics() {
 //        return comics;
 //    }
 //
@@ -138,6 +142,16 @@ public class Character {
 //    public void setSeries(SeriesList series) {
 //        this.series = series;
 //    }
+    @NonNull
+    @Override
+    public Date getExpiration() {
+        return expiration;
+    }
+
+    @Override
+    public void setExpiration(@NonNull Date expiration) {
+        this.expiration = expiration;
+    }
 
     @Override
     public boolean equals(Object o) {

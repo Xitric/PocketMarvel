@@ -12,4 +12,6 @@ public interface Expireable {
 
     @NonNull
     Date getExpiration();
+
+    void setExpiration(@NonNull Date expiration);
 }

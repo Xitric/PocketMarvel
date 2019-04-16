@@ -127,7 +127,19 @@ public abstract class DataFetcher<T> {
         //TODO: Extremely temporary until we can inject some executors!
         Executor background = Executors.newSingleThreadExecutor();
         background.execute(() -> {
+            //Set results to expire in 24 hours
+            for (T remoteResult : remoteResults) {
+                if (remoteResult instanceof Expireable) {
+                    Date expiration = new Date();
+                    expiration.setTime(expiration.getTime() + 24 * 60 * 60 * 1000); //24 hours in ms
+                    ((Expireable) remoteResult).setExpiration(expiration);
+                }
+            }
+
+            //Store in DB
             cacheResultsLocally(remoteResults);
+
+            //Notify listeners on main thread
             Handler h = new Handler(Looper.getMainLooper());
             h.post(() -> {
                 beginPresentingLocalContent(fetchFromDb());

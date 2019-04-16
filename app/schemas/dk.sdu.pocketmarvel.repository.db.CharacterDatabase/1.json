@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b45323b0973cf15f3f7aff96928f8489",
+    "identityHash": "b7c7bf91a021acf11edf0160ca858737",
     "entities": [
       {
         "tableName": "Character",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `modified` TEXT, `resourceURI` TEXT, `thumbnail_path` TEXT, `thumbnail_extension` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `modified` TEXT, `resourceURI` TEXT, `expiration` INTEGER, `thumbnail_path` TEXT, `thumbnail_extension` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -39,6 +39,12 @@
             "notNull": false
           },
           {
+            "fieldPath": "expiration",
+            "columnName": "expiration",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
             "fieldPath": "thumbnail.path",
             "columnName": "thumbnail_path",
             "affinity": "TEXT",
@@ -63,7 +69,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b45323b0973cf15f3f7aff96928f8489\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b7c7bf91a021acf11edf0160ca858737\")"
     ]
   }
 }
