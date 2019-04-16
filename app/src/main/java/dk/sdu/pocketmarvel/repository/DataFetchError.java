@@ -1,6 +1,6 @@
 package dk.sdu.pocketmarvel.repository;
 
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class DataFetchError {
 
@@ -10,7 +10,7 @@ public class DataFetchError {
         this.message = message;
     }
 
-    @NotNull
+    @NonNull
     @Override
     public String toString() {
         return "Error: " + message;

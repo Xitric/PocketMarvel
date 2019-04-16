@@ -5,15 +5,9 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.paging.PositionalDataSource;
 import android.support.annotation.NonNull;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import dk.sdu.pocketmarvel.repository.DataFetchError;
 import dk.sdu.pocketmarvel.repository.api.MarvelClient;
 import dk.sdu.pocketmarvel.repository.api.model.Character;
-import dk.sdu.pocketmarvel.repository.api.model.Image;
 import dk.sdu.pocketmarvel.repository.api.model.MarvelDataContainer;
 import dk.sdu.pocketmarvel.repository.api.model.MarvelDataWrapper;
 import retrofit2.Call;
@@ -63,7 +57,7 @@ public class CharacterDataSource extends PositionalDataSource<Character> {
                 .getCharacters(namePrefix, params.requestedStartPosition, params.requestedLoadSize)
                 .enqueue(new Callback<MarvelDataWrapper<Character>>() {
                     @Override
-                    public void onResponse(@NotNull Call<MarvelDataWrapper<Character>> call, @NotNull Response<MarvelDataWrapper<Character>> response) {
+                    public void onResponse(@NonNull Call<MarvelDataWrapper<Character>> call, @NonNull Response<MarvelDataWrapper<Character>> response) {
                         //OnResponse is also called for erroneous error codes. OnFailure is only for
                         //when the request itself could not even be performed.
                         if (response.isSuccessful()) {
@@ -82,7 +76,7 @@ public class CharacterDataSource extends PositionalDataSource<Character> {
                     }
 
                     @Override
-                    public void onFailure(@NotNull Call<MarvelDataWrapper<Character>> call, @NotNull Throwable t) {
+                    public void onFailure(@NonNull Call<MarvelDataWrapper<Character>> call, @NonNull Throwable t) {
                         //TODO: Should we retry the request?
                         handleError(t.getMessage());
                     }
@@ -96,7 +90,7 @@ public class CharacterDataSource extends PositionalDataSource<Character> {
                 .getCharacters(namePrefix, params.startPosition, params.loadSize)
                 .enqueue(new Callback<MarvelDataWrapper<Character>>() {
                     @Override
-                    public void onResponse(@NotNull Call<MarvelDataWrapper<Character>> call, @NotNull Response<MarvelDataWrapper<Character>> response) {
+                    public void onResponse(@NonNull Call<MarvelDataWrapper<Character>> call, @NonNull Response<MarvelDataWrapper<Character>> response) {
                         //OnResponse is also called for erroneous error codes. OnFailure is only for
                         //when the request itself could not even be performed.
                         if (response.isSuccessful()) {
@@ -115,7 +109,7 @@ public class CharacterDataSource extends PositionalDataSource<Character> {
                     }
 
                     @Override
-                    public void onFailure(@NotNull Call<MarvelDataWrapper<Character>> call, @NotNull Throwable t) {
+                    public void onFailure(@NonNull Call<MarvelDataWrapper<Character>> call, @NonNull Throwable t) {
                         //TODO: Should we retry the request?
                         handleError(t.getMessage());
                     }
