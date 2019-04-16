@@ -1,16 +1,25 @@
 package dk.sdu.pocketmarvel.feature.character;
 
 import android.arch.paging.PagedListAdapter;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import dk.sdu.pocketmarvel.OnAdapterSelectionListener;
 import dk.sdu.pocketmarvel.R;
+import dk.sdu.pocketmarvel.repository.GlideApp;
 import dk.sdu.pocketmarvel.repository.api.model.Character;
 
 public class CharacterAdapter extends PagedListAdapter<Character, CharacterAdapter.CharacterViewHolder> {
@@ -51,22 +60,37 @@ public class CharacterAdapter extends PagedListAdapter<Character, CharacterAdapt
             characterViewHolder.character.setText("Please wait...");
         } else {
             characterViewHolder.character.setText(character.getName());
+            GlideApp.with(characterViewHolder.itemView.getContext())
+                    .load(character.getThumbnail().getPath() + character.getThumbnail().getExtension())
+                    .skipMemoryCache(true)
+                    .placeholder(R.drawable.loader)
+                    .into(new SimpleTarget<Drawable>() {
+                        @Override
+                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                            characterViewHolder.image.setImageDrawable(resource);
+                            characterViewHolder.spinner.setVisibility(View.INVISIBLE);
+                        }
+                    });
         }
     }
 
     protected class CharacterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView character;
+        private ImageView image;
+        private ProgressBar spinner;
 
         CharacterViewHolder(@NonNull View itemView) {
             super(itemView);
             character = itemView.findViewById(R.id.tv_character_list_item);
+            image = itemView.findViewById(R.id.iv_character_thumbnail);
+            spinner = itemView.findViewById(R.id.pb_thumbnail);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            adapterSelectionListener.onSelected(getAdapterPosition());
+            adapterSelectionListener.onSelected(getItem(getAdapterPosition()).getId());
         }
     }
 }

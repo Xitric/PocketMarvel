@@ -13,6 +13,7 @@ import java.util.List;
 import dk.sdu.pocketmarvel.repository.DataFetchError;
 import dk.sdu.pocketmarvel.repository.api.MarvelClient;
 import dk.sdu.pocketmarvel.repository.api.model.Character;
+import dk.sdu.pocketmarvel.repository.api.model.Image;
 import dk.sdu.pocketmarvel.repository.api.model.MarvelDataContainer;
 import dk.sdu.pocketmarvel.repository.api.model.MarvelDataWrapper;
 import retrofit2.Call;
@@ -39,19 +40,24 @@ public class CharacterDataSource extends PositionalDataSource<Character> {
     public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<Character> callback) {
         //Perform request on a background thread supplied by Retrofit
 
-        List<Character> chars = new ArrayList<>();
-
-        for (String name: new String[] {"Captain America", "Iron Man", "Black Widow", "Goofballs", "The Hulk", "Goose", "Dr. Strange", "Deadpool"}) {
-            Character c = new Character();
-            c.setName(name);
-            chars.add(c);
-        }
-
-        callback.onResult(chars, 0, chars.size());
-
-        if (true) {
-            return;
-        }
+//        List<Character> chars = new ArrayList<>();
+//
+//
+//        for (String name: new String[] {"Captain America", "Iron Man", "Black Widow", "Goofballs", "The Hulk", "Goose", "Dr. Strange", "Deadpool"}) {
+//            Character c = new Character();
+//            c.setName(name);
+//            chars.add(c);
+//
+//            Image image = new Image();
+//            image.setPath("https://picsum.photos/200/200/?random");
+//            c.setThumbnail(image);
+//        }
+//
+//        callback.onResult(chars, 0, chars.size());
+//
+//        if (true) {
+//            return;
+//        }
 
         MarvelClient.getService()
                 .getCharacters(namePrefix, params.requestedStartPosition, params.requestedLoadSize)
