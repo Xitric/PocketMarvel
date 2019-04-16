@@ -1,47 +1,49 @@
 package dk.sdu.pocketmarvel.repository.character;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
 
+import java.util.List;
+
+import dk.sdu.pocketmarvel.repository.DataFetcher;
+import dk.sdu.pocketmarvel.repository.FetchResult;
 import dk.sdu.pocketmarvel.repository.api.MarvelClient;
 import dk.sdu.pocketmarvel.repository.api.model.Character;
 import dk.sdu.pocketmarvel.repository.api.model.MarvelDataWrapper;
+import dk.sdu.pocketmarvel.repository.db.CharacterDatabase;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CharacterRepository {
 
     private static CharacterRepository instance;
+    private CharacterDatabase characterDatabase;
 
-    public static CharacterRepository getInstance() {
+    public static CharacterRepository getInstance(Context applicationContext) {
         if (instance == null) {
             instance = new CharacterRepository();
+            instance.characterDatabase = CharacterDatabase.getInstance(applicationContext);
         }
         return instance;
     }
 
-    //TODO: Methods for getting specific character data
-    public LiveData<Character> getCharacter(int id) {
-        MutableLiveData<Character> data = new MutableLiveData<>();
-
-        MarvelClient.getService().getCharacter(id).enqueue(new Callback<MarvelDataWrapper<Character>>() {
+    public LiveData<FetchResult<Character>> getCharacter(int id) {
+        return new DataFetcher<Character>() {
+            @Override
+            protected LiveData<Character> fetchFromDb() {
+                return characterDatabase.characterDao().load(id);
+            }
 
             @Override
-            public void onResponse(Call<MarvelDataWrapper<Character>> call, Response<MarvelDataWrapper<Character>> response) {
-                if (response.isSuccessful()) {
-                    Character character = response.body().getData().getResults().get(0);
-                    if (character != null) {
-                        data.setValue(character);
-                    }
+            protected Call<MarvelDataWrapper<Character>> makeApiCall() {
+                return MarvelClient.getService().getCharacter(id);
+            }
+
+            @Override
+            protected void cacheResultsLocally(List<Character> results) {
+                if (results.size() > 0) {
+                    characterDatabase.characterDao().saveCharacter(results.get(0));
                 }
             }
-
-            @Override
-            public void onFailure(Call<MarvelDataWrapper<Character>> call, Throwable t) {
-
-            }
-        });
-        return data;
+        }.fetch().getResult();
     }
 }

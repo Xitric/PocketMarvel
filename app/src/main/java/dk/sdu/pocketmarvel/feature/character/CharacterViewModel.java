@@ -1,23 +1,30 @@
 package dk.sdu.pocketmarvel.feature.character;
 
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
+import android.support.annotation.NonNull;
 
+import dk.sdu.pocketmarvel.repository.FetchResult;
 import dk.sdu.pocketmarvel.repository.api.model.Character;
 import dk.sdu.pocketmarvel.repository.character.CharacterRepository;
 
-public class CharacterViewModel extends ViewModel {
+public class CharacterViewModel extends AndroidViewModel {
 
-    private LiveData<Character> character;
+    private LiveData<FetchResult<Character>> character;
+
+    public CharacterViewModel(@NonNull Application application) {
+        super(application);
+    }
 
     public void init(int characterId) {
         if (character != null) {
             return;
         }
-        character = CharacterRepository.getInstance().getCharacter(characterId);
+        character = CharacterRepository.getInstance(getApplication().getApplicationContext()).getCharacter(characterId);
     }
 
-    public LiveData<Character> getCharacter() {
+    public LiveData<FetchResult<Character>> getCharacter() {
         return character;
     }
 }

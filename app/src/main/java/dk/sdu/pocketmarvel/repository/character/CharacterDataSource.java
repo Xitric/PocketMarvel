@@ -1,11 +1,8 @@
 package dk.sdu.pocketmarvel.repository.character;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.paging.PositionalDataSource;
 import android.support.annotation.NonNull;
 
-import dk.sdu.pocketmarvel.repository.DataFetchError;
 import dk.sdu.pocketmarvel.repository.api.MarvelClient;
 import dk.sdu.pocketmarvel.repository.api.model.Character;
 import dk.sdu.pocketmarvel.repository.api.model.MarvelDataContainer;
@@ -18,41 +15,21 @@ import retrofit2.Response;
 public class CharacterDataSource extends PositionalDataSource<Character> {
 
     //TODO: How do we handle this best?
-    private String namePrefix = "S";
+    private String namePrefix = "C";
 
-    private MutableLiveData<DataFetchError> errorLiveData = new MutableLiveData<>();
+//    private MutableLiveData<FetchError> errorLiveData = new MutableLiveData<>();
 
     public void setNamePrefix(String namePrefix) {
         this.namePrefix = namePrefix;
     }
 
-    public LiveData<DataFetchError> getErrorLiveData() {
-        return errorLiveData;
-    }
+//    public LiveData<FetchError> getErrorLiveData() {
+//        return errorLiveData;
+//    }
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<Character> callback) {
         //Perform request on a background thread supplied by Retrofit
-
-//        List<Character> chars = new ArrayList<>();
-//
-//
-//        for (String name: new String[] {"Captain America", "Iron Man", "Black Widow", "Goofballs", "The Hulk", "Goose", "Dr. Strange", "Deadpool"}) {
-//            Character c = new Character();
-//            c.setName(name);
-//            chars.add(c);
-//
-//            Image image = new Image();
-//            image.setPath("https://picsum.photos/200/200/?random");
-//            c.setThumbnail(image);
-//        }
-//
-//        callback.onResult(chars, 0, chars.size());
-//
-//        if (true) {
-//            return;
-//        }
-
         MarvelClient.getService()
                 .getCharacters(namePrefix, params.requestedStartPosition, params.requestedLoadSize)
                 .enqueue(new Callback<MarvelDataWrapper<Character>>() {
@@ -117,6 +94,6 @@ public class CharacterDataSource extends PositionalDataSource<Character> {
     }
 
     private void handleError(String message) {
-        errorLiveData.postValue(new DataFetchError(message));
+//        errorLiveData.postValue(new FetchError(message));
     }
 }

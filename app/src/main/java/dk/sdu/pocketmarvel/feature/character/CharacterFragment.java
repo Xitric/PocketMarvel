@@ -9,22 +9,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import dk.sdu.pocketmarvel.DetailContract;
+import dk.sdu.pocketmarvel.LogContract;
 import dk.sdu.pocketmarvel.R;
+import dk.sdu.pocketmarvel.repository.FetchResult;
+import dk.sdu.pocketmarvel.repository.GlideApp;
 
 public class CharacterFragment extends Fragment {
 
     private CharacterViewModel characterViewModel;
+    private ImageView characterThumbnail;
     private TextView characterName;
     private TextView characterDescription;
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.character_fragment, container, false);
+        characterThumbnail = view.findViewById(R.id.iv_character_thumbnail);
         characterName = view.findViewById(R.id.tv_character_name);
         characterDescription = view.findViewById(R.id.tv_character_description);
         return view;
@@ -37,10 +42,20 @@ public class CharacterFragment extends Fragment {
         int id = bundle.getInt(DetailContract.CONTENT_ID);
         characterViewModel = ViewModelProviders.of(this).get(CharacterViewModel.class);
         characterViewModel.init(id);
-        characterViewModel.getCharacter().observe(this, character -> {
-            Log.i("CHARACTER", character.toString());
-            characterName.setText(character.getName());
-            characterDescription.setText(character.getDescription());
+
+        characterViewModel.getCharacter().observe(this, result -> {
+            if (result.getState() != FetchResult.State.Success && result.getState() != FetchResult.State.Fetching) {
+                Log.i(LogContract.POCKETMARVEL_TAG, result.getMessage());
+            }
+
+            if (result.getState() == FetchResult.State.Success) {
+                characterName.setText(result.getResult().getName());
+                characterDescription.setText(result.getResult().getDescription());
+
+                GlideApp.with(getContext())
+                        .load(result.getResult().getThumbnail().getPath() + "." + result.getResult().getThumbnail().getExtension())
+                        .into(characterThumbnail);
+            }
         });
     }
 
