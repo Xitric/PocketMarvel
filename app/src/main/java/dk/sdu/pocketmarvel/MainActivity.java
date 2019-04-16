@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import java.io.IOException;
 
@@ -18,24 +19,37 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+
+    public void onCharactersAction(View view){
         Intent intent = new Intent(this, CharacterActivity.class);
         startActivity(intent);
-
-        setContentView(R.layout.activity_main);
-
-        new Thread(() -> {
-            MarvelService service = MarvelClient.getService();
-            try {
-                MarvelDataWrapper<Event> wrapper = service.getEvent("Spider-Island")
-                        .execute().body();
-                Event event = wrapper.getData().getResults().get(0);
-
-                Log.i("MARVELRESULTS", String.valueOf(event.getId()));
-                Log.i("MARVELRESULTS", event.getTitle());
-                Log.i("MARVELRESULTS", event.getDescription());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
     }
+
+    public void onComicsAction(View view){
+        Intent intent = new Intent(this, null);
+        startActivity(intent);
+    }
+
+    public void onCreatorsAction(View view){
+        Intent intent = new Intent(this, null);
+        startActivity(intent);
+    }
+
+    public void onEventsAction(View view){
+        Intent intent = new Intent(this, null);
+        startActivity(intent);
+    }
+
+    public void onSeriesAction(View view){
+        Intent intent = new Intent(this, null);
+        startActivity(intent);
+    }
+
+    public void onStoriesAction(View view){
+        Intent intent = new Intent(this, null);
+        startActivity(intent);
+    }
+
 }
