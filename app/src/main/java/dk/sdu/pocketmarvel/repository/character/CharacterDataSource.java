@@ -7,6 +7,9 @@ import android.support.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dk.sdu.pocketmarvel.repository.DataFetchError;
 import dk.sdu.pocketmarvel.repository.api.MarvelClient;
 import dk.sdu.pocketmarvel.repository.api.model.Character;
@@ -35,6 +38,21 @@ public class CharacterDataSource extends PositionalDataSource<Character> {
     @Override
     public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<Character> callback) {
         //Perform request on a background thread supplied by Retrofit
+
+        List<Character> chars = new ArrayList<>();
+
+        for (String name: new String[] {"Captain America", "Iron Man", "Black Widow", "Goofballs", "The Hulk", "Goose", "Dr. Strange", "Deadpool"}) {
+            Character c = new Character();
+            c.setName(name);
+            chars.add(c);
+        }
+
+        callback.onResult(chars, 0, chars.size());
+
+        if (true) {
+            return;
+        }
+
         MarvelClient.getService()
                 .getCharacters(namePrefix, params.requestedStartPosition, params.requestedLoadSize)
                 .enqueue(new Callback<MarvelDataWrapper<Character>>() {
