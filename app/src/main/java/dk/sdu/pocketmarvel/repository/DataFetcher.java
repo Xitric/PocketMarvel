@@ -14,8 +14,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import dk.sdu.pocketmarvel.LogContract;
-import dk.sdu.pocketmarvel.repository.api.model.MarvelDataContainer;
-import dk.sdu.pocketmarvel.repository.api.model.MarvelDataWrapper;
+import dk.sdu.pocketmarvel.vo.MarvelDataContainer;
+import dk.sdu.pocketmarvel.vo.MarvelDataWrapper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.HttpException;

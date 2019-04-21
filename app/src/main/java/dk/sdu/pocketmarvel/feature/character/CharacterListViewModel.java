@@ -8,8 +8,8 @@ import android.arch.paging.PagedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import dk.sdu.pocketmarvel.repository.api.model.Character;
 import dk.sdu.pocketmarvel.repository.character.CharacterDataSourceFactory;
+import dk.sdu.pocketmarvel.vo.Character;
 
 public class CharacterListViewModel extends ViewModel {
 

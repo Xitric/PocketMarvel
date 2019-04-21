@@ -1,11 +1,11 @@
-package dk.sdu.pocketmarvel.repository.api.model;
+package dk.sdu.pocketmarvel.vo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class StoryList {
+public class SeriesList {
 
     @SerializedName("available")
     @Expose
@@ -18,7 +18,7 @@ public class StoryList {
     private String collectionURI;
     @SerializedName("items")
     @Expose
-    private List<StorySummary> items = null;
+    private List<SeriesSummary> items = null;
 
     public String getAvailable() {
         return available;
@@ -44,11 +44,11 @@ public class StoryList {
         this.collectionURI = collectionURI;
     }
 
-    public List<StorySummary> getItems() {
+    public List<SeriesSummary> getItems() {
         return items;
     }
 
-    public void setItems(List<StorySummary> items) {
+    public void setItems(List<SeriesSummary> items) {
         this.items = items;
     }
 

@@ -16,10 +16,10 @@ import android.widget.TextView;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
-import dk.sdu.pocketmarvel.OnAdapterSelectionListener;
 import dk.sdu.pocketmarvel.R;
+import dk.sdu.pocketmarvel.feature.shared.OnAdapterSelectionListener;
 import dk.sdu.pocketmarvel.repository.GlideApp;
-import dk.sdu.pocketmarvel.repository.api.model.Character;
+import dk.sdu.pocketmarvel.vo.Character;
 
 public class CharacterAdapter extends PagedListAdapter<Character, CharacterAdapter.CharacterViewHolder> {
 

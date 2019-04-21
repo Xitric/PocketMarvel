@@ -1,8 +1,8 @@
 package dk.sdu.pocketmarvel.repository.api;
 
-import dk.sdu.pocketmarvel.repository.api.model.Character;
-import dk.sdu.pocketmarvel.repository.api.model.Event;
-import dk.sdu.pocketmarvel.repository.api.model.MarvelDataWrapper;
+import dk.sdu.pocketmarvel.vo.Character;
+import dk.sdu.pocketmarvel.vo.Event;
+import dk.sdu.pocketmarvel.vo.MarvelDataWrapper;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;

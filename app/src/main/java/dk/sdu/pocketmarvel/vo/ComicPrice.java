@@ -1,16 +1,16 @@
-package dk.sdu.pocketmarvel.repository.api.model;
+package dk.sdu.pocketmarvel.vo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Url {
+public class ComicPrice {
 
     @SerializedName("type")
     @Expose
     private String type;
-    @SerializedName("url")
+    @SerializedName("price")
     @Expose
-    private String url;
+    private String price;
 
     public String getType() {
         return type;
@@ -20,12 +20,12 @@ public class Url {
         this.type = type;
     }
 
-    public String getUrl() {
-        return url;
+    public String getPrice() {
+        return price;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setPrice(String price) {
+        this.price = price;
     }
 
 }

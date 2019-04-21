@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import dk.sdu.pocketmarvel.DetailContract;
 import dk.sdu.pocketmarvel.LogContract;
 import dk.sdu.pocketmarvel.R;
+import dk.sdu.pocketmarvel.feature.shared.DetailContract;
 import dk.sdu.pocketmarvel.repository.FetchResult;
 import dk.sdu.pocketmarvel.repository.GlideApp;
 

@@ -5,7 +5,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
-import dk.sdu.pocketmarvel.repository.api.model.Character;
+import dk.sdu.pocketmarvel.vo.Character;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 

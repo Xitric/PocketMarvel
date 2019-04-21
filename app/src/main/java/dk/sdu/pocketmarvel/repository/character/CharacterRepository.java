@@ -8,9 +8,9 @@ import java.util.List;
 import dk.sdu.pocketmarvel.repository.DataFetcher;
 import dk.sdu.pocketmarvel.repository.FetchResult;
 import dk.sdu.pocketmarvel.repository.api.MarvelClient;
-import dk.sdu.pocketmarvel.repository.api.model.Character;
-import dk.sdu.pocketmarvel.repository.api.model.MarvelDataWrapper;
 import dk.sdu.pocketmarvel.repository.db.CharacterDatabase;
+import dk.sdu.pocketmarvel.vo.Character;
+import dk.sdu.pocketmarvel.vo.MarvelDataWrapper;
 import retrofit2.Call;
 
 public class CharacterRepository {

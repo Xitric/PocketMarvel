@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.paging.DataSource;
 
-import dk.sdu.pocketmarvel.repository.api.model.Character;
+import dk.sdu.pocketmarvel.vo.Character;
 
 public class CharacterDataSourceFactory extends DataSource.Factory<Integer, Character> {
 

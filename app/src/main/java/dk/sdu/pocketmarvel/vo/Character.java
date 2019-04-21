@@ -1,4 +1,4 @@
-package dk.sdu.pocketmarvel.repository.api.model;
+package dk.sdu.pocketmarvel.vo;
 
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;

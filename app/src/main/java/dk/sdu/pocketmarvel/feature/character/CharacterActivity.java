@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 
-import dk.sdu.pocketmarvel.MasterDetailActivity;
+import dk.sdu.pocketmarvel.feature.shared.MasterDetailActivity;
 
 public class CharacterActivity extends MasterDetailActivity {
 

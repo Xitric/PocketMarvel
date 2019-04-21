@@ -6,8 +6,8 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
 import dk.sdu.pocketmarvel.repository.FetchResult;
-import dk.sdu.pocketmarvel.repository.api.model.Character;
 import dk.sdu.pocketmarvel.repository.character.CharacterRepository;
+import dk.sdu.pocketmarvel.vo.Character;
 
 public class CharacterViewModel extends AndroidViewModel {
 

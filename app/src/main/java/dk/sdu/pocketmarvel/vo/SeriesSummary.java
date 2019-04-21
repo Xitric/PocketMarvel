@@ -1,9 +1,9 @@
-package dk.sdu.pocketmarvel.repository.api.model;
+package dk.sdu.pocketmarvel.vo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class EventSummary {
+public class SeriesSummary {
 
     @SerializedName("resourceURI")
     @Expose

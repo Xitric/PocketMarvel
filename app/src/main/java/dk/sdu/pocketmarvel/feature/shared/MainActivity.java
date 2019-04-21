@@ -1,10 +1,11 @@
-package dk.sdu.pocketmarvel;
+package dk.sdu.pocketmarvel.feature.shared;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import dk.sdu.pocketmarvel.R;
 import dk.sdu.pocketmarvel.feature.character.CharacterActivity;
 
 public class MainActivity extends AppCompatActivity {

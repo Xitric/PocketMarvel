@@ -5,7 +5,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
-import dk.sdu.pocketmarvel.repository.api.model.Character;
+import dk.sdu.pocketmarvel.vo.Character;
 
 @android.arch.persistence.room.Database(entities = {Character.class}, version = 1)
 @TypeConverters({DateTypeConverter.class})

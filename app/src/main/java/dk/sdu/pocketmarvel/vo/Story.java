@@ -1,11 +1,9 @@
-package dk.sdu.pocketmarvel.repository.api.model;
+package dk.sdu.pocketmarvel.vo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
-public class Event {
+public class Story {
 
     @SerializedName("id")
     @Expose
@@ -19,42 +17,33 @@ public class Event {
     @SerializedName("resourceURI")
     @Expose
     private String resourceURI;
-    @SerializedName("urls")
+    @SerializedName("type")
     @Expose
-    private List<Url> urls = null;
+    private String type;
     @SerializedName("modified")
     @Expose
     private String modified;
-    @SerializedName("start")
-    @Expose
-    private String start;
-    @SerializedName("end")
-    @Expose
-    private String end;
     @SerializedName("thumbnail")
     @Expose
     private Image thumbnail;
     @SerializedName("comics")
     @Expose
     private ComicList comics;
-    @SerializedName("stories")
-    @Expose
-    private StoryList stories;
     @SerializedName("series")
     @Expose
     private SeriesList series;
+    @SerializedName("events")
+    @Expose
+    private EventList events;
     @SerializedName("characters")
     @Expose
     private CharacterList characters;
     @SerializedName("creators")
     @Expose
     private CreatorList creators;
-    @SerializedName("next")
+    @SerializedName("originalissue")
     @Expose
-    private EventSummary next;
-    @SerializedName("previous")
-    @Expose
-    private EventSummary previous;
+    private ComicSummary originalissue;
 
     public String getId() {
         return id;
@@ -88,12 +77,12 @@ public class Event {
         this.resourceURI = resourceURI;
     }
 
-    public List<Url> getUrls() {
-        return urls;
+    public String getType() {
+        return type;
     }
 
-    public void setUrls(List<Url> urls) {
-        this.urls = urls;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getModified() {
@@ -102,22 +91,6 @@ public class Event {
 
     public void setModified(String modified) {
         this.modified = modified;
-    }
-
-    public String getStart() {
-        return start;
-    }
-
-    public void setStart(String start) {
-        this.start = start;
-    }
-
-    public String getEnd() {
-        return end;
-    }
-
-    public void setEnd(String end) {
-        this.end = end;
     }
 
     public Image getThumbnail() {
@@ -136,20 +109,20 @@ public class Event {
         this.comics = comics;
     }
 
-    public StoryList getStories() {
-        return stories;
-    }
-
-    public void setStories(StoryList stories) {
-        this.stories = stories;
-    }
-
     public SeriesList getSeries() {
         return series;
     }
 
     public void setSeries(SeriesList series) {
         this.series = series;
+    }
+
+    public EventList getEvents() {
+        return events;
+    }
+
+    public void setEvents(EventList events) {
+        this.events = events;
     }
 
     public CharacterList getCharacters() {
@@ -168,20 +141,12 @@ public class Event {
         this.creators = creators;
     }
 
-    public EventSummary getNext() {
-        return next;
+    public ComicSummary getOriginalissue() {
+        return originalissue;
     }
 
-    public void setNext(EventSummary next) {
-        this.next = next;
-    }
-
-    public EventSummary getPrevious() {
-        return previous;
-    }
-
-    public void setPrevious(EventSummary previous) {
-        this.previous = previous;
+    public void setOriginalissue(ComicSummary originalissue) {
+        this.originalissue = originalissue;
     }
 
 }

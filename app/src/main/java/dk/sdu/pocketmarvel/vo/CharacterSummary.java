@@ -1,9 +1,9 @@
-package dk.sdu.pocketmarvel.repository.api.model;
+package dk.sdu.pocketmarvel.vo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ComicSummary {
+public class CharacterSummary {
 
     @SerializedName("resourceURI")
     @Expose
@@ -11,6 +11,9 @@ public class ComicSummary {
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("role")
+    @Expose
+    private String role;
 
     public String getResourceURI() {
         return resourceURI;
@@ -26,6 +29,14 @@ public class ComicSummary {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
 }

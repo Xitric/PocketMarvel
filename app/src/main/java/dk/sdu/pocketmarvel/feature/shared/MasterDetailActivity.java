@@ -1,9 +1,11 @@
-package dk.sdu.pocketmarvel;
+package dk.sdu.pocketmarvel.feature.shared;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+
+import dk.sdu.pocketmarvel.R;
 
 public abstract class MasterDetailActivity extends AppCompatActivity implements OnAdapterSelectionListener {
 
