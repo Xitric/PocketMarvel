@@ -3,22 +3,21 @@ package dk.sdu.pocketmarvel.feature.shared;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 
 import dk.sdu.pocketmarvel.R;
 
-public abstract class MasterDetailActivity extends AppCompatActivity implements OnAdapterSelectionListener {
+public abstract class MasterDetailActivity extends AppCompatActivity implements OnMasterSelectionListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master_detail);
 
-        MasterFragment masterFragment = new MasterFragment();
-        masterFragment.setMasterAdapter(getMasterAdapter());
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.vg_primary_fragment, masterFragment)
-                .commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.vg_primary_fragment, getMasterFragment())
+                    .commit();
+        }
     }
 
     @Override
@@ -53,7 +52,7 @@ public abstract class MasterDetailActivity extends AppCompatActivity implements 
                 .commit();
     }
 
-    protected abstract RecyclerView.Adapter getMasterAdapter();
+    protected abstract Fragment getMasterFragment();
 
     protected abstract Fragment getDetailFragment();
 }

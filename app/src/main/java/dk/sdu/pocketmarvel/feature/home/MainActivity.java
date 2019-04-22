@@ -1,4 +1,4 @@
-package dk.sdu.pocketmarvel.feature.shared;
+package dk.sdu.pocketmarvel.feature.home;
 
 import android.content.Intent;
 import android.os.Bundle;

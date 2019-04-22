@@ -21,7 +21,7 @@ public class CharacterListViewModel extends ViewModel {
         init();
     }
 
-    public final void init() {
+    private void init() {
         fetchExecutor = Executors.newSingleThreadExecutor();
 
         PagedList.Config pagedConfig = new PagedList.Config.Builder()

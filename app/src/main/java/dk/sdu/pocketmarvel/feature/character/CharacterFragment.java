@@ -20,27 +20,16 @@ import dk.sdu.pocketmarvel.repository.GlideApp;
 
 public class CharacterFragment extends Fragment {
 
-    private CharacterViewModel characterViewModel;
     private ImageView characterThumbnail;
     private TextView characterName;
     private TextView characterDescription;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.character_fragment, container, false);
-        characterThumbnail = view.findViewById(R.id.iv_character_thumbnail);
-        characterName = view.findViewById(R.id.tv_character_name);
-        characterDescription = view.findViewById(R.id.tv_character_description);
-        return view;
-    }
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Bundle bundle = this.getArguments();
-        int id = bundle.getInt(DetailContract.CONTENT_ID);
-        characterViewModel = ViewModelProviders.of(this).get(CharacterViewModel.class);
+        int id = getArguments() == null ? -1 : getArguments().getInt(DetailContract.CONTENT_ID);
+        CharacterViewModel characterViewModel = ViewModelProviders.of(this).get(CharacterViewModel.class);
         characterViewModel.init(id);
 
         characterViewModel.getCharacter().observe(this, result -> {
@@ -59,4 +48,13 @@ public class CharacterFragment extends Fragment {
         });
     }
 
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.character_fragment, container, false);
+        characterThumbnail = view.findViewById(R.id.iv_character_thumbnail);
+        characterName = view.findViewById(R.id.tv_character_name);
+        characterDescription = view.findViewById(R.id.tv_character_description);
+        return view;
+    }
 }

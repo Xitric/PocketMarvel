@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".feature.character.CharacterActivity"></activity>
-        <activity android:name=".feature.shared.MainActivity">
+        <activity android:name=".feature.home.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
