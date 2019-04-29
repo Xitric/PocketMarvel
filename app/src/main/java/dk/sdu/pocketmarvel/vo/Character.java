@@ -2,6 +2,8 @@ package dk.sdu.pocketmarvel.vo;
 
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -32,16 +34,14 @@ public class Character implements Expireable {
     @SerializedName("resourceURI")
     @Expose
     private String resourceURI;
-    //    @SerializedName("urls")
-//    @Expose
-//    private List<Url> urls = null;
     @SerializedName("thumbnail")
     @Expose
     @Embedded
     private Image thumbnail;
-    //    @SerializedName("comics")
-//    @Expose
-//    private ComicList comics;
+    @SerializedName("comics")
+    @Expose
+    @Ignore
+    private ComicList comics;
 //    @SerializedName("stories")
 //    @Expose
 //    private StoryList stories;
@@ -111,14 +111,14 @@ public class Character implements Expireable {
         this.thumbnail = thumbnail;
     }
 
-    //    public ComicList getComics() {
-//        return comics;
-//    }
-//
-//    public void setComics(ComicList comics) {
-//        this.comics = comics;
-//    }
-//
+    public ComicList getComics() {
+        return comics;
+    }
+
+    public void setComics(ComicList comics) {
+        this.comics = comics;
+    }
+
 //    public StoryList getStories() {
 //        return stories;
 //    }

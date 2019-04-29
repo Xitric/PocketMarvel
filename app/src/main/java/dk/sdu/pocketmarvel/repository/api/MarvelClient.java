@@ -3,6 +3,7 @@ package dk.sdu.pocketmarvel.repository.api;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import dk.sdu.pocketmarvel.vo.ComicSummary;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -13,7 +14,10 @@ public class MarvelClient {
 
     public static Retrofit getInstance() {
         if (instance == null) {
-            Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+            Gson gson = new GsonBuilder()
+                    .excludeFieldsWithoutExposeAnnotation()
+                    .registerTypeAdapter(ComicSummary.class, new ComicSummaryDeserializer())
+                    .create();
 
             instance = new Retrofit.Builder()
                     .baseUrl("https://gateway.marvel.com:443/")

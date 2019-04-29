@@ -15,6 +15,6 @@ public interface CharacterDao {
     @Insert(onConflict = REPLACE)
     void saveCharacter(Character character);
 
-    @Query("SELECT * FROM character WHERE id = :characterId")
+    @Query("SELECT * FROM Character WHERE id = :characterId")
     LiveData<Character> load(int characterId);
 }
