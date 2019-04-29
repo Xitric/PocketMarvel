@@ -46,6 +46,10 @@ public class CharacterFragment extends Fragment {
                         .into(characterThumbnail);
             }
         });
+
+        characterViewModel.getComics().observe(this, result -> {
+            System.out.println("Hello");
+        });
     }
 
     @Override

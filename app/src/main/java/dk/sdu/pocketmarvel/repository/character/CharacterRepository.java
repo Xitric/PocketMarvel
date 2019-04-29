@@ -3,6 +3,7 @@ package dk.sdu.pocketmarvel.repository.character;
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dk.sdu.pocketmarvel.repository.DataFetcher;
@@ -10,6 +11,7 @@ import dk.sdu.pocketmarvel.repository.FetchResult;
 import dk.sdu.pocketmarvel.repository.api.MarvelClient;
 import dk.sdu.pocketmarvel.repository.db.MarvelDatabase;
 import dk.sdu.pocketmarvel.vo.Character;
+import dk.sdu.pocketmarvel.vo.CharacterComics;
 import dk.sdu.pocketmarvel.vo.ComicSummary;
 import dk.sdu.pocketmarvel.vo.MarvelDataWrapper;
 import retrofit2.Call;
@@ -49,9 +51,11 @@ public class CharacterRepository {
                     //of this character that we need to save
                     marvelDatabase.comicDao().saveComicSummaries(character.getComics().getItems());
 
-                    for (ComicSummary comicSummary: character.getComics().getItems()) {
-                        //TODO: Save join table
+                    List<CharacterComics> characterComics = new ArrayList<>();
+                    for (ComicSummary comicSummary : character.getComics().getItems()) {
+                        characterComics.add(new CharacterComics(character.getId(), comicSummary.getId()));
                     }
+                    marvelDatabase.comicDao().saveCharacterComics(characterComics);
                 }
             }
         }.fetch().getResult();

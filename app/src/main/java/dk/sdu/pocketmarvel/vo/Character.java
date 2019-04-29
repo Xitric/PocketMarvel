@@ -3,7 +3,6 @@ package dk.sdu.pocketmarvel.vo;
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -42,7 +41,7 @@ public class Character implements Expireable {
     @Expose
     @Ignore
     private ComicList comics;
-//    @SerializedName("stories")
+    //    @SerializedName("stories")
 //    @Expose
 //    private StoryList stories;
 //    @SerializedName("events")
@@ -119,7 +118,7 @@ public class Character implements Expireable {
         this.comics = comics;
     }
 
-//    public StoryList getStories() {
+    //    public StoryList getStories() {
 //        return stories;
 //    }
 //

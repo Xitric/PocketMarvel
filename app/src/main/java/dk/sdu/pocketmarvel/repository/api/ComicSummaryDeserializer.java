@@ -23,6 +23,6 @@ class ComicSummaryDeserializer implements JsonDeserializer<ComicSummary> {
 
         String name = jsonObject.get("name").getAsString();
 
-        return  new ComicSummary(id, name);
+        return new ComicSummary(id, name);
     }
 }
