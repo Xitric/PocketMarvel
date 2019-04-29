@@ -1,31 +1,25 @@
 package dk.sdu.pocketmarvel.vo;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
+@Entity
 public class ComicSummary {
 
-    @SerializedName("resourceURI")
-    @Expose
-    private String resourceURI;
-    @SerializedName("name")
-    @Expose
+    @PrimaryKey
+    private int id;
     private String name;
 
-    public String getResourceURI() {
-        return resourceURI;
-    }
-
-    public void setResourceURI(String resourceURI) {
-        this.resourceURI = resourceURI;
+    public ComicSummary(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getId() {
+        return id;
     }
-
 }
