@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -70,6 +71,7 @@ public class CharacterFragment extends Fragment implements OnAdapterSelectionLis
         comicsRecycler = view.findViewById(R.id.rv_character_comics);
 
         comicsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        comicsRecycler.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         comicsRecycler.setHasFixedSize(true);
         comicsAdapter = new CharacterComicsAdapter(this);
         comicsRecycler.setAdapter(comicsAdapter);

@@ -9,10 +9,12 @@ public class ComicSummary {
     @PrimaryKey
     private int id;
     private String name;
+    private int year;
 
-    public ComicSummary(int id, String name) {
+    public ComicSummary(int id, String name, int year) {
         this.id = id;
         this.name = name;
+        this.year = year;
     }
 
     public String getName() {
@@ -21,5 +23,9 @@ public class ComicSummary {
 
     public int getId() {
         return id;
+    }
+
+    public int getYear() {
+        return year;
     }
 }

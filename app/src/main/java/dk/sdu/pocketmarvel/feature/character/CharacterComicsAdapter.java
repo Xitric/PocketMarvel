@@ -37,6 +37,12 @@ public class CharacterComicsAdapter extends RecyclerView.Adapter<CharacterComics
     @Override
     public void onBindViewHolder(@NonNull ComicViewHolder comicViewHolder, int i) {
         comicViewHolder.comicName.setText(comics.get(i).getName());
+
+        if (comics.get(i).getYear() == -1) {
+            comicViewHolder.comicYear.setText("Unknown year");
+        } else {
+            comicViewHolder.comicYear.setText(String.valueOf(comics.get(i).getYear()));
+        }
     }
 
     @Override
@@ -51,10 +57,12 @@ public class CharacterComicsAdapter extends RecyclerView.Adapter<CharacterComics
     protected class ComicViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView comicName;
+        private TextView comicYear;
 
         public ComicViewHolder(@NonNull View itemView) {
             super(itemView);
             comicName = itemView.findViewById(R.id.tv_comic_name);
+            comicYear = itemView.findViewById(R.id.tv_comic_year);
             itemView.setOnClickListener(this);
         }
 
