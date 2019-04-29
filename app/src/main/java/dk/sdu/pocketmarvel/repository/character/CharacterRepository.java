@@ -1,13 +1,21 @@
 package dk.sdu.pocketmarvel.repository.character;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
+import android.arch.lifecycle.Transformations;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PagedList;
 import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
-import dk.sdu.pocketmarvel.repository.DataFetcher;
 import dk.sdu.pocketmarvel.repository.FetchResult;
+import dk.sdu.pocketmarvel.repository.FetchStatus;
+import dk.sdu.pocketmarvel.repository.NetworkStatus;
+import dk.sdu.pocketmarvel.repository.SingularDataFetcher;
 import dk.sdu.pocketmarvel.repository.api.MarvelClient;
 import dk.sdu.pocketmarvel.repository.db.MarvelDatabase;
 import dk.sdu.pocketmarvel.vo.Character;
@@ -21,6 +29,8 @@ public class CharacterRepository {
     private static CharacterRepository instance;
     private MarvelDatabase marvelDatabase;
 
+    private LiveData<FetchStatus> statusLiveData;
+
     public static CharacterRepository getInstance(Context applicationContext) {
         if (instance == null) {
             instance = new CharacterRepository();
@@ -29,8 +39,31 @@ public class CharacterRepository {
         return instance;
     }
 
+    public LiveData<FetchStatus> getStatusLiveData() {
+        return statusLiveData;
+    }
+
+    public LiveData<PagedList<Character>> getCharactersPaged() {
+        Executor fetchExecutor = Executors.newSingleThreadExecutor();
+
+        PagedList.Config pagedConfig = new PagedList.Config.Builder()
+                .setPageSize(20)
+                .setInitialLoadSizeHint(60)
+                .setPrefetchDistance(20)
+                .setEnablePlaceholders(true)
+                .build();
+
+        CharacterBoundaryCallback boundaryCallback = new CharacterBoundaryCallback(marvelDatabase, pagedConfig.pageSize);
+        statusLiveData = boundaryCallback.getStatusLiveData();
+
+        return new LivePagedListBuilder<>(marvelDatabase.characterDao().allUsers(), pagedConfig)
+                .setFetchExecutor(fetchExecutor)
+                .setBoundaryCallback(boundaryCallback)
+                .build();
+    }
+
     public LiveData<FetchResult<Character>> getCharacter(int id) {
-        return new DataFetcher<Character>() {
+        return new SingularDataFetcher<Character>() {
             @Override
             protected LiveData<Character> fetchFromDb() {
                 return marvelDatabase.characterDao().load(id);
@@ -42,21 +75,20 @@ public class CharacterRepository {
             }
 
             @Override
-            protected void cacheResultsLocally(List<Character> results) {
-                if (results.size() > 0) {
-                    Character character = results.get(0);
-                    marvelDatabase.characterDao().saveCharacter(character);
+            protected void cacheResultLocally(Character result) {
+                //TODO: Move as a method to DAO
+                //TODO: Also support a list of characters with this additional information (to support the paging technique)
+                marvelDatabase.characterDao().saveCharacter(result);
 
-                    //When we receive a new character, we also get some information about the comics
-                    //of this character that we need to save
-                    marvelDatabase.comicDao().saveComicSummaries(character.getComics().getItems());
+                //When we receive a new character, we also get some information about the comics
+                //of this character that we need to save
+                marvelDatabase.comicDao().saveComicSummaries(result.getComics().getItems());
 
-                    List<CharacterComics> characterComics = new ArrayList<>();
-                    for (ComicSummary comicSummary : character.getComics().getItems()) {
-                        characterComics.add(new CharacterComics(character.getId(), comicSummary.getId()));
-                    }
-                    marvelDatabase.comicDao().saveCharacterComics(characterComics);
+                List<CharacterComics> characterComics = new ArrayList<>();
+                for (ComicSummary comicSummary : result.getComics().getItems()) {
+                    characterComics.add(new CharacterComics(result.getId(), comicSummary.getId()));
                 }
+                marvelDatabase.comicDao().saveCharacterComics(characterComics);
             }
         }.fetch().getResult();
     }

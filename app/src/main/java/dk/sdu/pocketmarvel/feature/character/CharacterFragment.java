@@ -19,7 +19,7 @@ import dk.sdu.pocketmarvel.LogContract;
 import dk.sdu.pocketmarvel.R;
 import dk.sdu.pocketmarvel.feature.shared.DetailContract;
 import dk.sdu.pocketmarvel.feature.shared.OnAdapterSelectionListener;
-import dk.sdu.pocketmarvel.repository.FetchResult;
+import dk.sdu.pocketmarvel.repository.NetworkStatus;
 import dk.sdu.pocketmarvel.repository.GlideApp;
 
 public class CharacterFragment extends Fragment implements OnAdapterSelectionListener {
@@ -39,18 +39,18 @@ public class CharacterFragment extends Fragment implements OnAdapterSelectionLis
         characterViewModel.init(id);
 
         characterViewModel.getCharacter().observe(this, result -> {
-            if (result.getState() != FetchResult.State.Success && result.getState() != FetchResult.State.Fetching) {
+            if (result.getState() != NetworkStatus.Success && result.getState() != NetworkStatus.Fetching) {
                 Log.i(LogContract.POCKETMARVEL_TAG, result.getMessage());
             }
 
-            if (result.getState() == FetchResult.State.Success) {
+            if (result.getState() == NetworkStatus.Success) {
                 characterName.setText(result.getResult().getName());
                 characterDescription.setText(result.getResult().getDescription().isEmpty() ? "Description missing" : result.getResult().getDescription());
 
                 GlideApp.with(getContext())
                         .load(result.getResult().getThumbnail().getPath() + "." + result.getResult().getThumbnail().getExtension())
                         .into(characterThumbnail);
-            } else if (result.getState() == FetchResult.State.Fetching) {
+            } else if (result.getState() == NetworkStatus.Fetching) {
                 characterName.setText("Loading...");
                 characterDescription.setText("Loading...");
             }

@@ -59,16 +59,16 @@ public class CharacterAdapter extends PagedListAdapter<Character, CharacterAdapt
             characterViewHolder.character.setText("Please wait...");
         } else {
             characterViewHolder.character.setText(character.getName());
-            GlideApp.with(characterViewHolder.itemView.getContext())
-                    .load(character.getThumbnail().getPath() + "/standard_medium." + character.getThumbnail().getExtension())
-                    .placeholder(R.drawable.loader)
-                    .into(new SimpleTarget<Drawable>() {
-                        @Override
-                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                            characterViewHolder.image.setImageDrawable(resource);
-                            characterViewHolder.spinner.setVisibility(View.INVISIBLE);
-                        }
-                    });
+//            GlideApp.with(characterViewHolder.itemView.getContext())
+//                    .load(character.getThumbnail().getPath() + "/standard_medium." + character.getThumbnail().getExtension())
+//                    .placeholder(R.drawable.loader)
+//                    .into(new SimpleTarget<Drawable>() {
+//                        @Override
+//                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+//                            characterViewHolder.image.setImageDrawable(resource);
+//                            characterViewHolder.spinner.setVisibility(View.INVISIBLE);
+//                        }
+//                    });
         }
     }
 
