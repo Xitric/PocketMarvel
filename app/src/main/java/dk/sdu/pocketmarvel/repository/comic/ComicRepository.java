@@ -5,12 +5,8 @@ import android.content.Context;
 
 import java.util.List;
 
-import dk.sdu.pocketmarvel.repository.DataFetcher;
-import dk.sdu.pocketmarvel.repository.FetchResult;
 import dk.sdu.pocketmarvel.repository.db.MarvelDatabase;
 import dk.sdu.pocketmarvel.vo.ComicSummary;
-import dk.sdu.pocketmarvel.vo.MarvelDataWrapper;
-import retrofit2.Call;
 
 public class ComicRepository {
 
@@ -25,22 +21,7 @@ public class ComicRepository {
         return instance;
     }
 
-    public LiveData<FetchResult<ComicSummary>> getComicSummaries(int characterId) {
-        return new DataFetcher<ComicSummary>() {
-            @Override
-            protected LiveData<ComicSummary> fetchFromDb() {
-                return null;
-            }
-
-            @Override
-            protected Call<MarvelDataWrapper<ComicSummary>> makeApiCall() {
-                return null;
-            }
-
-            @Override
-            protected void cacheResultsLocally(List<ComicSummary> results) {
-
-            }
-        }.fetch().getResult();
+    public LiveData<List<ComicSummary>> getComicSummaries(int characterId) {
+        return marvelDatabase.comicDao().getComicSummaries(characterId);
     }
 }

@@ -21,7 +21,7 @@ public interface ComicDao {
     @Insert(onConflict = REPLACE)
     void saveCharacterComics(List<CharacterComics> characterComics);
 
-    @Query("SELECT ComicSummary.id, ComicSummary.name " +
+    @Query("SELECT ComicSummary.id, ComicSummary.name, ComicSummary.year " +
             "FROM ComicSummary " +
             "INNER JOIN CharacterComics " +
             "ON CharacterComics.characterId = :characterId AND CharacterComics.comicId = ComicSummary.id")

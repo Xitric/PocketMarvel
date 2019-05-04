@@ -39,7 +39,7 @@ public class CharacterAdapter extends PagedListAdapter<Character, CharacterAdapt
     };
     private final OnAdapterSelectionListener adapterSelectionListener;
 
-    public CharacterAdapter(OnAdapterSelectionListener adapterSelectionListener) {
+    CharacterAdapter(OnAdapterSelectionListener adapterSelectionListener) {
         super(characterDiffCallback);
         this.adapterSelectionListener = adapterSelectionListener;
     }

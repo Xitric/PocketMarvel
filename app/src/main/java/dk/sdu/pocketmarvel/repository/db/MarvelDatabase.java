@@ -35,5 +35,6 @@ public abstract class MarvelDatabase extends RoomDatabase {
     }
 
     public abstract CharacterDao characterDao();
+
     public abstract ComicDao comicDao();
 }
