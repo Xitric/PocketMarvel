@@ -3,15 +3,18 @@ package dk.sdu.pocketmarvel.vo;
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import java.util.Date;
 import java.util.Objects;
 
+import dk.sdu.pocketmarvel.repository.Expireable;
+
 @Entity
-public class Comic {
+public class Comic implements Expireable {
 
     @SerializedName("id")
     @Expose
@@ -105,6 +108,7 @@ public class Comic {
 //    @SerializedName("events")
 //    @Expose
 //    private EventList events;
+    private Date expiration;
 
     public int getId() {
         return id;
@@ -341,4 +345,31 @@ public class Comic {
 //        this.events = events;
 //    }
 
+    @NonNull
+    @Override
+    public Date getExpiration() {
+        return expiration;
+    }
+
+    @Override
+    public void setExpiration(@NonNull Date expiration) {
+        this.expiration = expiration;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comic comic = (Comic) o;
+        return id == comic.id &&
+                title.equals(comic.title) &&
+                Objects.equals(description, comic.description) &&
+                Objects.equals(resourceURI, comic.resourceURI) &&
+                Objects.equals(thumbnail, comic.thumbnail);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, description, resourceURI, thumbnail);
+    }
 }

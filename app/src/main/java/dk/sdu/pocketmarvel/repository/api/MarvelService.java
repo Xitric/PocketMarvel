@@ -26,6 +26,7 @@ public interface MarvelService {
     Call<MarvelDataWrapper<Comic>> getComics(@Query("titleStartsWith") String namePrefix,
                                              @Query("offset") Integer offset,
                                              @Query("limit") Integer amount);
+
     @GET("v1/public/comics/{id}")
     Call<MarvelDataWrapper<Comic>> getComic(@Path("id") int id);
 }

@@ -1,12 +1,17 @@
 package dk.sdu.pocketmarvel.repository.comic;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PagedList;
 import android.content.Context;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
-import dk.sdu.pocketmarvel.repository.DataFetcher;
 import dk.sdu.pocketmarvel.repository.FetchResult;
+import dk.sdu.pocketmarvel.repository.PagedData;
+import dk.sdu.pocketmarvel.repository.SingularDataFetcher;
 import dk.sdu.pocketmarvel.repository.api.MarvelClient;
 import dk.sdu.pocketmarvel.repository.db.MarvelDatabase;
 import dk.sdu.pocketmarvel.vo.Comic;
@@ -31,8 +36,33 @@ public class ComicRepository {
         return marvelDatabase.comicDao().getComicSummaries(characterId);
     }
 
+    private void refreshComics() {
+        Executors.newSingleThreadExecutor().execute(() ->
+                marvelDatabase.comicDao().deleteAllComics());
+    }
+
+    public PagedData<Comic> getComicsPaged() {
+        Executor fetchExecutor = Executors.newSingleThreadExecutor();
+
+        PagedList.Config pagedConfig = new PagedList.Config.Builder()
+                .setPageSize(12)
+                .setInitialLoadSizeHint(36)
+                .setPrefetchDistance(12)
+                .setEnablePlaceholders(true)
+                .build();
+
+        ComicBoundaryCallback boundaryCallback = new ComicBoundaryCallback(marvelDatabase, pagedConfig.pageSize);
+
+        LiveData<PagedList<Comic>> pagedListLiveData = new LivePagedListBuilder<>(marvelDatabase.comicDao().allComics(), pagedConfig)
+                .setFetchExecutor(fetchExecutor)
+                .setBoundaryCallback(boundaryCallback)
+                .build();
+
+        return new PagedData<>(pagedListLiveData, boundaryCallback, this::refreshComics);
+    }
+
     public LiveData<FetchResult<Comic>> getComic(int comicId) {
-        return new DataFetcher<Comic>() {
+        return new SingularDataFetcher<Comic>() {
             @Override
             protected LiveData<Comic> fetchFromDb() {
                 return marvelDatabase.comicDao().load(comicId);
@@ -44,11 +74,8 @@ public class ComicRepository {
             }
 
             @Override
-            protected void cacheResultsLocally(List<Comic> results) {
-                if (results.size() > 0) {
-                    Comic comic = results.get(0);
-                    marvelDatabase.comicDao().saveComic(comic);
-                }
+            protected void cacheResultLocally(Comic comic) {
+                marvelDatabase.comicDao().saveComic(comic);
             }
         }.fetch().getResult();
     }

@@ -1,49 +1,50 @@
 package dk.sdu.pocketmarvel.feature.comic;
 
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
-import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
+import android.support.annotation.NonNull;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import dk.sdu.pocketmarvel.repository.comic.ComicDataSourceFactory;
+import dk.sdu.pocketmarvel.repository.FetchStatus;
+import dk.sdu.pocketmarvel.repository.PagedData;
+import dk.sdu.pocketmarvel.repository.comic.ComicRepository;
 import dk.sdu.pocketmarvel.vo.Comic;
 
-public class ComicListViewModel extends ViewModel {
+public class ComicListViewModel extends AndroidViewModel {
 
-    private LiveData<PagedList<Comic>> comicsLiveData;
-    private ExecutorService fetchExecutor;
+    private PagedData<Comic> pagedData;
 
-    public ComicListViewModel() {
+    public ComicListViewModel(@NonNull Application application) {
+        super(application);
         init();
     }
 
     private void init() {
-        fetchExecutor = Executors.newSingleThreadExecutor();
-
-        PagedList.Config pagedConfig = new PagedList.Config.Builder()
-                .setPageSize(20)
-                .setInitialLoadSizeHint(60)
-                .setPrefetchDistance(20)
-                .setEnablePlaceholders(true)
-                .build();
-
-        ComicDataSourceFactory dataSourceFactory = new ComicDataSourceFactory();
-
-        comicsLiveData = new LivePagedListBuilder<>(dataSourceFactory, pagedConfig)
-                .setFetchExecutor(fetchExecutor)
-                .build();
+        pagedData = ComicRepository.getInstance(getApplication().getApplicationContext())
+                .getComicsPaged();
     }
 
+    public void setSearchTerm(String searchTerm) {
+        pagedData.setSearchTerm(searchTerm);
+    }
+
+    /**
+     * Get a list of all {@link Comic Comics} that supports paging. This can be used to
+     * avoid loading an excessively long list of Comics into memory.
+     *
+     * @return A list of Comics that supports paging.
+     */
     public LiveData<PagedList<Comic>> getComicsLiveData() {
-        return comicsLiveData;
+        return pagedData.getPagedListLiveData();
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        fetchExecutor.shutdownNow();
+    /**
+     * Get a live representation of the network status for paging.
+     *
+     * @return A live representation of the network status for paging.
+     */
+    public LiveData<FetchStatus> getNetworkStatusLiveData() {
+        return pagedData.getNetworkStatus();
     }
 }

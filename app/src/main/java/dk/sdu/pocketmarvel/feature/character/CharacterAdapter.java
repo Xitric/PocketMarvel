@@ -13,12 +13,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
 import dk.sdu.pocketmarvel.R;
 import dk.sdu.pocketmarvel.feature.shared.OnAdapterSelectionListener;
-import dk.sdu.pocketmarvel.repository.GlideApp;
 import dk.sdu.pocketmarvel.vo.Character;
 
 public class CharacterAdapter extends PagedListAdapter<Character, CharacterAdapter.CharacterViewHolder> {
@@ -38,10 +38,12 @@ public class CharacterAdapter extends PagedListAdapter<Character, CharacterAdapt
         }
     };
     private final OnAdapterSelectionListener adapterSelectionListener;
+    private RequestManager glide;
 
-    CharacterAdapter(OnAdapterSelectionListener adapterSelectionListener) {
+    CharacterAdapter(OnAdapterSelectionListener adapterSelectionListener, RequestManager glide) {
         super(characterDiffCallback);
         this.adapterSelectionListener = adapterSelectionListener;
+        this.glide = glide;
     }
 
     @NonNull
@@ -59,7 +61,10 @@ public class CharacterAdapter extends PagedListAdapter<Character, CharacterAdapt
             characterViewHolder.character.setText("Please wait...");
         } else {
             characterViewHolder.character.setText(character.getName());
-            GlideApp.with(characterViewHolder.itemView.getContext())
+
+            glide.clear(characterViewHolder.target);
+            characterViewHolder.image.setImageDrawable(null);
+            characterViewHolder.target = glide
                     .load(character.getThumbnail().getPath() + "/standard_medium." + character.getThumbnail().getExtension())
                     .into(new SimpleTarget<Drawable>() {
                         @Override
@@ -76,6 +81,7 @@ public class CharacterAdapter extends PagedListAdapter<Character, CharacterAdapt
         private TextView character;
         private ImageView image;
         private ProgressBar spinner;
+        private SimpleTarget target;
 
         CharacterViewHolder(@NonNull View itemView) {
             super(itemView);

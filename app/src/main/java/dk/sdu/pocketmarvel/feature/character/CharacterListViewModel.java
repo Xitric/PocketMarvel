@@ -6,8 +6,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.paging.PagedList;
 import android.support.annotation.NonNull;
 
-import java.util.concurrent.ExecutorService;
-
 import dk.sdu.pocketmarvel.repository.FetchStatus;
 import dk.sdu.pocketmarvel.repository.PagedData;
 import dk.sdu.pocketmarvel.repository.character.CharacterRepository;

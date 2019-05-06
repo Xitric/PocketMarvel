@@ -5,8 +5,6 @@ import android.arch.paging.PagedList;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import dk.sdu.pocketmarvel.repository.character.CharacterBoundaryCallback;
-
 public class PagedData<T> {
 
     @NonNull
@@ -14,12 +12,12 @@ public class PagedData<T> {
     @NonNull
     private final LiveData<FetchStatus> networkStatus;
     @NonNull
-    private final CharacterBoundaryCallback boundaryCallback;
+    private final AbstractBoundaryCallback<T> boundaryCallback;
     @NonNull
     private final Runnable refresher;
 
     public PagedData(@NonNull LiveData<PagedList<T>> pagedListLiveData,
-                     CharacterBoundaryCallback boundaryCallback,
+                     @NonNull AbstractBoundaryCallback<T> boundaryCallback,
                      @NonNull Runnable refresher) {
         this.pagedListLiveData = pagedListLiveData;
         this.networkStatus = boundaryCallback.getStatusLiveData();

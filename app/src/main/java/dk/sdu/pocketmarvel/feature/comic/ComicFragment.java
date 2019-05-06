@@ -15,8 +15,8 @@ import android.widget.TextView;
 import dk.sdu.pocketmarvel.LogContract;
 import dk.sdu.pocketmarvel.R;
 import dk.sdu.pocketmarvel.feature.shared.DetailContract;
-import dk.sdu.pocketmarvel.repository.FetchResult;
 import dk.sdu.pocketmarvel.repository.GlideApp;
+import dk.sdu.pocketmarvel.repository.NetworkStatus;
 
 public class ComicFragment extends Fragment {
 
@@ -42,11 +42,11 @@ public class ComicFragment extends Fragment {
         comicViewModel.init(id);
 
         comicViewModel.getComic().observe(this, result -> {
-            if (result.getState() != FetchResult.State.Success && result.getState() != FetchResult.State.Fetching) {
+            if (result.getState() != NetworkStatus.Success && result.getState() != NetworkStatus.Fetching) {
                 Log.i(LogContract.POCKETMARVEL_TAG, result.getMessage());
             }
 
-            if (result.getState() == FetchResult.State.Success) {
+            if (result.getState() == NetworkStatus.Success) {
                 comicTitle.setText(result.getResult().getTitle());
                 String description = result.getResult().getDescription();
 
@@ -60,7 +60,7 @@ public class ComicFragment extends Fragment {
                         .load(result.getResult().getThumbnail().getPath() + "/portrait_uncanny." + result.getResult().getThumbnail().getExtension())
                         .into(comicThumbnail);
 
-            }  else if (result.getState() == FetchResult.State.Fetching) {
+            } else if (result.getState() == NetworkStatus.Fetching) {
                 comicTitle.setText("Loading...");
                 comicDescription.setText("Loading...");
             }

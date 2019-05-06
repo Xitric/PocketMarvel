@@ -1,6 +1,7 @@
 package dk.sdu.pocketmarvel.repository.db;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.paging.DataSource;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
@@ -31,6 +32,18 @@ public interface ComicDao {
     @Insert(onConflict = REPLACE)
     void saveComic(Comic comic);
 
+    @Insert(onConflict = REPLACE)
+    void saveComics(List<Comic> comics);
+
     @Query("SELECT * FROM Comic  WHERE Comic.id = :comicId")
     LiveData<Comic> load(int comicId);
+
+    @Query("SELECT * FROM Comic ORDER BY Comic.title")
+    DataSource.Factory<Integer, Comic> allComics();
+
+    @Query("SELECT COUNT(*) FROM Comic")
+    int getNumberOfComics();
+
+    @Query("DELETE FROM Comic")
+    void deleteAllComics();
 }

@@ -1,28 +1,19 @@
 package dk.sdu.pocketmarvel.repository.character;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.Transformations;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 import android.content.Context;
-import android.support.annotation.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import dk.sdu.pocketmarvel.repository.FetchResult;
-import dk.sdu.pocketmarvel.repository.FetchStatus;
-import dk.sdu.pocketmarvel.repository.NetworkStatus;
 import dk.sdu.pocketmarvel.repository.PagedData;
 import dk.sdu.pocketmarvel.repository.SingularDataFetcher;
 import dk.sdu.pocketmarvel.repository.api.MarvelClient;
 import dk.sdu.pocketmarvel.repository.db.MarvelDatabase;
 import dk.sdu.pocketmarvel.vo.Character;
-import dk.sdu.pocketmarvel.vo.CharacterComics;
-import dk.sdu.pocketmarvel.vo.ComicSummary;
 import dk.sdu.pocketmarvel.vo.MarvelDataWrapper;
 import retrofit2.Call;
 

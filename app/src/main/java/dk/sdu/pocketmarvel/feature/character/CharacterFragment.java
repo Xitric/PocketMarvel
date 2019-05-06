@@ -19,8 +19,8 @@ import dk.sdu.pocketmarvel.LogContract;
 import dk.sdu.pocketmarvel.R;
 import dk.sdu.pocketmarvel.feature.shared.DetailContract;
 import dk.sdu.pocketmarvel.feature.shared.OnAdapterSelectionListener;
-import dk.sdu.pocketmarvel.repository.NetworkStatus;
 import dk.sdu.pocketmarvel.repository.GlideApp;
+import dk.sdu.pocketmarvel.repository.NetworkStatus;
 
 public class CharacterFragment extends Fragment implements OnAdapterSelectionListener {
 
@@ -80,6 +80,9 @@ public class CharacterFragment extends Fragment implements OnAdapterSelectionLis
 
     @Override
     public void onSelected(int id) {
-        Log.i(LogContract.POCKETMARVEL_TAG, "You pressed comic with id " + id);
+        //TODO: Somehow show the comic detail view from here
+//        Intent intent = new Intent(this.getContext(), ComicActivity.class);
+//        intent.putExtra(DetailContract.CONTENT_ID, id);
+//        startActivity(intent);
     }
 }

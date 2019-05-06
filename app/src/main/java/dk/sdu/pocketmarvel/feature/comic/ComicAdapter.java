@@ -22,7 +22,6 @@ import dk.sdu.pocketmarvel.vo.Comic;
 
 public class ComicAdapter extends PagedListAdapter<Comic, ComicAdapter.ComicViewHolder> {
 
-    private RequestManager glide;
     private static final DiffUtil.ItemCallback<Comic> comicDiffCallBack = new DiffUtil.ItemCallback<Comic>() {
         @Override
         public boolean areItemsTheSame(@NonNull Comic a, @NonNull Comic b) {
@@ -34,10 +33,10 @@ public class ComicAdapter extends PagedListAdapter<Comic, ComicAdapter.ComicView
             return a.equals(b);
         }
     };
-
     private final OnAdapterSelectionListener adapterSelectionListener;
+    private RequestManager glide;
 
-    protected ComicAdapter(OnAdapterSelectionListener adapterSelectionListener, RequestManager glide) {
+    ComicAdapter(OnAdapterSelectionListener adapterSelectionListener, RequestManager glide) {
         super(comicDiffCallBack);
         this.adapterSelectionListener = adapterSelectionListener;
         this.glide = glide;
@@ -56,6 +55,7 @@ public class ComicAdapter extends PagedListAdapter<Comic, ComicAdapter.ComicView
 
         if (comic != null) {
             glide.clear(comicViewHolder.target);
+            comicViewHolder.image.setImageDrawable(null);
             comicViewHolder.target = glide
                     .load(comic.getThumbnail().getPath() + "/portrait_xlarge." + comic.getThumbnail().getExtension())
                     .into(new SimpleTarget<Drawable>() {
@@ -86,6 +86,5 @@ public class ComicAdapter extends PagedListAdapter<Comic, ComicAdapter.ComicView
         public void onClick(View v) {
             adapterSelectionListener.onSelected(getItem(getAdapterPosition()).getId());
         }
-
     }
 }
