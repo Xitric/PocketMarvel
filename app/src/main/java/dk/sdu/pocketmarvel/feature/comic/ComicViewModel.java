@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
 import dk.sdu.pocketmarvel.repository.FetchResult;
+import dk.sdu.pocketmarvel.repository.comic.ComicRepository;
 import dk.sdu.pocketmarvel.vo.Comic;
 
 public class ComicViewModel extends AndroidViewModel {
@@ -16,4 +17,14 @@ public class ComicViewModel extends AndroidViewModel {
         super(application);
     }
 
+    public void init(int comicId) {
+        if (comic != null) {
+            return;
+        }
+        comic = ComicRepository.getInstance(getApplication().getApplicationContext()).getComic(comicId);
+    }
+
+    public LiveData<FetchResult<Comic>> getComic() {
+        return comic;
+    }
 }
