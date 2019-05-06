@@ -56,7 +56,7 @@ public class CharacterBoundaryCallback extends PagedList.BoundaryCallback<Charac
 
             @Override
             protected void cacheResultsLocally(List<Character> results) {
-                database.characterDao().saveCharacters(results);
+                database.characterDao().saveCharacters(results, database.comicDao());
             }
         }.fetch());
     }
@@ -80,7 +80,7 @@ public class CharacterBoundaryCallback extends PagedList.BoundaryCallback<Charac
 
             @Override
             protected void cacheResultsLocally(List<Character> results) {
-                database.characterDao().saveCharacters(results);
+                database.characterDao().saveCharacters(results, database.comicDao());
             }
         }.fetch());
     }

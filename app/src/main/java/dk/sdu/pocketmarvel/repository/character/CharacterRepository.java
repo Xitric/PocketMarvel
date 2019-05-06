@@ -76,19 +76,7 @@ public class CharacterRepository {
 
             @Override
             protected void cacheResultLocally(Character result) {
-                //TODO: Move as a method to DAO
-                //TODO: Also support a list of characters with this additional information (to support the paging technique)
-                marvelDatabase.characterDao().saveCharacter(result);
-
-                //When we receive a new character, we also get some information about the comics
-                //of this character that we need to save
-                marvelDatabase.comicDao().saveComicSummaries(result.getComics().getItems());
-
-                List<CharacterComics> characterComics = new ArrayList<>();
-                for (ComicSummary comicSummary : result.getComics().getItems()) {
-                    characterComics.add(new CharacterComics(result.getId(), comicSummary.getId()));
-                }
-                marvelDatabase.comicDao().saveCharacterComics(characterComics);
+                marvelDatabase.characterDao().saveCharacter(result, marvelDatabase.comicDao());
             }
         }.fetch().getResult();
     }
