@@ -27,24 +27,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onCreatorsAction(View view) {
-        Intent intent = new Intent(this, null);
-        startActivity(intent);
-    }
-
-    public void onEventsAction(View view) {
-        Intent intent = new Intent(this, null);
-        startActivity(intent);
-    }
-
-    public void onSeriesAction(View view) {
-        Intent intent = new Intent(this, null);
-        startActivity(intent);
-    }
-
-    public void onStoriesAction(View view) {
-        Intent intent = new Intent(this, null);
-        startActivity(intent);
-    }
-
 }
