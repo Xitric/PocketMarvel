@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".feature.character.CharacterActivity"></activity>
+        <activity android:name=".feature.comic.ComicActivity"></activity>
+        <activity android:name=".feature.character.CharacterActivity" />
         <activity android:name=".feature.home.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
