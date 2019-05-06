@@ -44,6 +44,7 @@
         android:id="@+id/btn_comics"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="onComicsAction"
         android:text="@string/comics"
         app:layout_constraintBottom_toTopOf="@+id/btn_creators"
         app:layout_constraintEnd_toEndOf="parent"

@@ -8,6 +8,7 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 import dk.sdu.pocketmarvel.vo.CharacterComics;
+import dk.sdu.pocketmarvel.vo.Comic;
 import dk.sdu.pocketmarvel.vo.ComicSummary;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
@@ -26,4 +27,10 @@ public interface ComicDao {
             "INNER JOIN CharacterComics " +
             "ON CharacterComics.characterId = :characterId AND CharacterComics.comicId = ComicSummary.id")
     LiveData<List<ComicSummary>> getComicSummaries(int characterId);
+
+    @Insert(onConflict = REPLACE)
+    void saveComic(Comic comic);
+
+    @Query("SELECT * FROM Comic  WHERE Comic.id = :comicId")
+    LiveData<Comic> load(int comicId);
 }

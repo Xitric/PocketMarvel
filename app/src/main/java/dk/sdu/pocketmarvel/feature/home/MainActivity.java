@@ -7,6 +7,7 @@ import android.view.View;
 
 import dk.sdu.pocketmarvel.R;
 import dk.sdu.pocketmarvel.feature.character.CharacterActivity;
+import dk.sdu.pocketmarvel.feature.comic.ComicActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onComicsAction(View view) {
-        Intent intent = new Intent(this, null);
+        Intent intent = new Intent(this, ComicActivity.class);
         startActivity(intent);
     }
 
