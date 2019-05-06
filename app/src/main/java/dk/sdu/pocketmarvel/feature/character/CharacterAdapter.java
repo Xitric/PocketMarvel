@@ -61,7 +61,6 @@ public class CharacterAdapter extends PagedListAdapter<Character, CharacterAdapt
             characterViewHolder.character.setText(character.getName());
             GlideApp.with(characterViewHolder.itemView.getContext())
                     .load(character.getThumbnail().getPath() + "/standard_medium." + character.getThumbnail().getExtension())
-                    .placeholder(R.drawable.loader)
                     .into(new SimpleTarget<Drawable>() {
                         @Override
                         public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {

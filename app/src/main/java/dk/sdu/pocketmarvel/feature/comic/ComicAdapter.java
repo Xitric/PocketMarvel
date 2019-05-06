@@ -12,16 +12,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
 import dk.sdu.pocketmarvel.R;
 import dk.sdu.pocketmarvel.feature.shared.OnAdapterSelectionListener;
-import dk.sdu.pocketmarvel.repository.GlideApp;
 import dk.sdu.pocketmarvel.vo.Comic;
 
 public class ComicAdapter extends PagedListAdapter<Comic, ComicAdapter.ComicViewHolder> {
 
+    private RequestManager glide;
     private static final DiffUtil.ItemCallback<Comic> comicDiffCallBack = new DiffUtil.ItemCallback<Comic>() {
         @Override
         public boolean areItemsTheSame(@NonNull Comic a, @NonNull Comic b) {
@@ -36,9 +37,10 @@ public class ComicAdapter extends PagedListAdapter<Comic, ComicAdapter.ComicView
 
     private final OnAdapterSelectionListener adapterSelectionListener;
 
-    protected ComicAdapter(OnAdapterSelectionListener adapterSelectionListener) {
+    protected ComicAdapter(OnAdapterSelectionListener adapterSelectionListener, RequestManager glide) {
         super(comicDiffCallBack);
         this.adapterSelectionListener = adapterSelectionListener;
+        this.glide = glide;
     }
 
     @NonNull
@@ -51,20 +53,19 @@ public class ComicAdapter extends PagedListAdapter<Comic, ComicAdapter.ComicView
     @Override
     public void onBindViewHolder(@NonNull ComicViewHolder comicViewHolder, int i) {
         Comic comic = getItem(i);
-        //comicViewHolder.image.setImageResource(R.drawable.loader);
+
         if (comic != null) {
-            GlideApp.with(comicViewHolder.itemView.getContext())
-                    .load(comic.getThumbnail().getPath() + "." + comic.getThumbnail().getExtension())
-
+            glide.clear(comicViewHolder.target);
+            comicViewHolder.target = glide
+                    .load(comic.getThumbnail().getPath() + "/portrait_xlarge." + comic.getThumbnail().getExtension())
                     .into(new SimpleTarget<Drawable>() {
-                        @Override
-                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                            comicViewHolder.image.setImageDrawable(resource);
-                            comicViewHolder.progressBar.setVisibility(View.INVISIBLE);
-                        }
-                    });
-
-
+                              @Override
+                              public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                                  comicViewHolder.image.setImageDrawable(resource);
+                                  comicViewHolder.progressBar.setVisibility(View.INVISIBLE);
+                              }
+                          }
+                    );
         }
     }
 
@@ -72,6 +73,7 @@ public class ComicAdapter extends PagedListAdapter<Comic, ComicAdapter.ComicView
 
         private ImageView image;
         private ProgressBar progressBar;
+        private SimpleTarget target;
 
         ComicViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,5 +86,6 @@ public class ComicAdapter extends PagedListAdapter<Comic, ComicAdapter.ComicView
         public void onClick(View v) {
             adapterSelectionListener.onSelected(getItem(getAdapterPosition()).getId());
         }
+
     }
 }

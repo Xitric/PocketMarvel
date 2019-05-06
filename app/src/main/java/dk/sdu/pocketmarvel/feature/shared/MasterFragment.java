@@ -38,7 +38,6 @@ public abstract class MasterFragment extends Fragment implements OnAdapterSelect
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
 
-        RecyclerView.Adapter adapter = getAdapter();
         recyclerView.setAdapter(getAdapter());
         return view;
     }
