@@ -12,6 +12,7 @@ import dk.sdu.pocketmarvel.vo.Character;
 
 public class CharacterListFragment extends MasterFragment {
 
+    private CharacterListViewModel viewModel;
     private PagedListAdapter<Character, ?> adapter;
 
     public CharacterListFragment() {
@@ -22,7 +23,7 @@ public class CharacterListFragment extends MasterFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        CharacterListViewModel viewModel = ViewModelProviders.of(this).get(CharacterListViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(CharacterListViewModel.class);
         viewModel.getCharactersLiveData().observe(this, characters ->
                 adapter.submitList(characters));
 
@@ -33,5 +34,10 @@ public class CharacterListFragment extends MasterFragment {
     @Override
     public RecyclerView.Adapter getAdapter() {
         return adapter;
+    }
+
+    @Override
+    protected void onSearch(String searchTerm) {
+        viewModel.setSearchTerm(searchTerm);
     }
 }

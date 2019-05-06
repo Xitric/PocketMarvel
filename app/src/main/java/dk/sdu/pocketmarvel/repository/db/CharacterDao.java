@@ -3,6 +3,7 @@ package dk.sdu.pocketmarvel.repository.db;
 import android.arch.lifecycle.LiveData;
 import android.arch.paging.DataSource;
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Transaction;
@@ -52,4 +53,7 @@ public abstract class CharacterDao {
 
     @Query("SELECT COUNT(*) FROM Character")
     public abstract int getNumberOfCharacters();
+
+    @Query("DELETE FROM Character")
+    public abstract void deleteAllCharacters();
 }

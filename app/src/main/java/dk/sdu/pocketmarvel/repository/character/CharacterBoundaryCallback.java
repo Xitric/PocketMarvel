@@ -21,6 +21,7 @@ public class CharacterBoundaryCallback extends PagedList.BoundaryCallback<Charac
 
     private final MarvelDatabase database;
     private final int pageSize;
+    private String searchTerm;
 
     private MutableLiveData<DataFetcher<Character>> fetcher = new MutableLiveData<>();
     private LiveData<FetchStatus> statusLiveData;
@@ -38,6 +39,10 @@ public class CharacterBoundaryCallback extends PagedList.BoundaryCallback<Charac
         return statusLiveData;
     }
 
+    public void setSearchTerm(String searchTerm) {
+        this.searchTerm = searchTerm;
+    }
+
     @Override
     public void onZeroItemsLoaded() {
         fetcher.setValue(new DataFetcher<Character>() {
@@ -51,7 +56,7 @@ public class CharacterBoundaryCallback extends PagedList.BoundaryCallback<Charac
 
             @Override
             protected Call<MarvelDataWrapper<Character>> makeApiCall() {
-                return MarvelClient.getService().getCharacters(null, 0, pageSize);
+                return MarvelClient.getService().getCharacters(searchTerm, 0, pageSize);
             }
 
             @Override
@@ -75,7 +80,7 @@ public class CharacterBoundaryCallback extends PagedList.BoundaryCallback<Charac
             @Override
             protected Call<MarvelDataWrapper<Character>> makeApiCall() {
                 int offset = database.characterDao().getNumberOfCharacters();
-                return MarvelClient.getService().getCharacters(null, offset, pageSize);
+                return MarvelClient.getService().getCharacters(searchTerm, offset, pageSize);
             }
 
             @Override

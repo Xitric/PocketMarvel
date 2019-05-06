@@ -9,13 +9,13 @@ import android.support.annotation.NonNull;
 import java.util.concurrent.ExecutorService;
 
 import dk.sdu.pocketmarvel.repository.FetchStatus;
+import dk.sdu.pocketmarvel.repository.PagedData;
 import dk.sdu.pocketmarvel.repository.character.CharacterRepository;
 import dk.sdu.pocketmarvel.vo.Character;
 
 public class CharacterListViewModel extends AndroidViewModel {
 
-    private LiveData<PagedList<Character>> charactersLiveData;
-    private LiveData<FetchStatus> networkStatusLiveData;
+    private PagedData<Character> pagedData;
 
     public CharacterListViewModel(@NonNull Application application) {
         super(application);
@@ -23,10 +23,12 @@ public class CharacterListViewModel extends AndroidViewModel {
     }
 
     private void init() {
-        CharacterRepository repo = CharacterRepository.getInstance(getApplication().getApplicationContext());
+        pagedData = CharacterRepository.getInstance(getApplication().getApplicationContext())
+                .getCharactersPaged();
+    }
 
-        charactersLiveData = repo.getCharactersPaged();
-        networkStatusLiveData = repo.getStatusLiveData();
+    public void setSearchTerm(String searchTerm) {
+        pagedData.setSearchTerm(searchTerm);
     }
 
     /**
@@ -36,7 +38,7 @@ public class CharacterListViewModel extends AndroidViewModel {
      * @return A list of Characters that supports paging.
      */
     public LiveData<PagedList<Character>> getCharactersLiveData() {
-        return charactersLiveData;
+        return pagedData.getPagedListLiveData();
     }
 
     /**
@@ -45,6 +47,6 @@ public class CharacterListViewModel extends AndroidViewModel {
      * @return A live representation of the network status for paging.
      */
     public LiveData<FetchStatus> getNetworkStatusLiveData() {
-        return networkStatusLiveData;
+        return pagedData.getNetworkStatus();
     }
 }
