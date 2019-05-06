@@ -4,7 +4,9 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
+import android.support.annotation.WorkerThread;
 import android.util.Log;
 
 import java.net.UnknownHostException;
@@ -26,7 +28,7 @@ import retrofit2.Response;
  * the app can be used in offline mode. Inspired by Google's Android Architecture Components
  * samples, but also modified to a great extent, including handling of the offline state.
  *
- * @param <T>
+ * @param <T> The type of data to fetch.
  * @see <a href="https://github.com/googlesamples/android-architecture-components/blob/88747993139224a4bb6dbe985adf652d557de621/GithubBrowserSample/app/src/main/java/com/android/example/github/repository/NetworkBoundResource.kt">Google's NetworkBoundResource</a>
  */
 public abstract class DataFetcher<T> {
@@ -40,7 +42,7 @@ public abstract class DataFetcher<T> {
      * MediatorLiveData.
      */
     @NonNull
-    private MediatorLiveData<FetchResult<T>> result;
+    private MediatorLiveData<FetchResult<List<T>>> result;
 
     public DataFetcher() {
         result = new MediatorLiveData<>();
@@ -50,12 +52,13 @@ public abstract class DataFetcher<T> {
      * Call this method to start fetching the data from the local DB and the remote web service, if
      * necessary. Results can be observed on the LiveData object exposed by this class.
      *
-     * @return This data fetcher to allow for method chaining
+     * @return This data fetcher to allow for method chaining.
      */
+    @MainThread
     public DataFetcher<T> fetch() {
         //First we try to fetch the data from the local DB. We use the MediatorLiveData to be
         //notified when a result is available
-        LiveData<T> dbLiveData = fetchFromDb();
+        LiveData<List<T>> dbLiveData = fetchFromDb();
         result.addSource(dbLiveData, dbResult -> {
             result.removeSource(dbLiveData); //We just wanted to get notified once
 
@@ -63,8 +66,10 @@ public abstract class DataFetcher<T> {
                 //If the local data is not good enough, we must fetch it from the API. We inform any
                 //listeners that we are fetching data, but we also supply them with the current
                 //data - a good temporary value
-                result.setValue(new FetchResult<>(FetchResult.State.Fetching, dbResult, null));
-                fetchFromApi();
+                result.setValue(new FetchResult<>(NetworkStatus.Fetching, dbResult, null));
+
+                //TODO: MEGA CRAZY Temporary
+                Executors.newSingleThreadExecutor().execute(this::fetchFromApi);
             } else {
                 //The local data is good enough, so whenever a new value is available in the
                 //database, we just pass it along
@@ -79,6 +84,7 @@ public abstract class DataFetcher<T> {
      * Call this method when the local data is not sufficient, and new data must be obtained from
      * the remote web service.
      */
+    @WorkerThread
     private void fetchFromApi() {
         Log.i(LogContract.POCKETMARVEL_TAG, "Begun fetching new data from remote web service.");
         makeApiCall().enqueue(new Callback<MarvelDataWrapper<T>>() {
@@ -123,6 +129,7 @@ public abstract class DataFetcher<T> {
      *
      * @param remoteResults The result received from the remote web service
      */
+    @MainThread
     private void handleSuccessfulApiResponse(List<T> remoteResults) {
         //TODO: Extremely temporary until we can inject some executors!
         Executor background = Executors.newSingleThreadExecutor();
@@ -139,11 +146,11 @@ public abstract class DataFetcher<T> {
             //Store in DB
             cacheResultsLocally(remoteResults);
 
+            //TODO: Also temporary until we can inject a shared main executor (we can make our own Executor subtype that uses a Handler and Looper internally)
             //Notify listeners on main thread
             Handler h = new Handler(Looper.getMainLooper());
-            h.post(() -> {
-                beginPresentingLocalContent(fetchFromDb());
-            });
+            h.post(() ->
+                    beginPresentingLocalContent(fetchFromDb()));
         });
     }
 
@@ -151,34 +158,35 @@ public abstract class DataFetcher<T> {
      * Check if the local result is sufficient for displaying in the UI, or if we should try to
      * fetch a fresh result from the web service.
      *
-     * @param localResult The result from the DB
+     * @param localResults The result from the DB
      * @return True if we should fetch a fresh result, false otherwise
      */
-    private boolean shouldFetchFromApi(T localResult) {
+    @MainThread
+    private boolean shouldFetchFromApi(List<T> localResults) {
         //If there is no data locally, we must re-fetch
-        if (localResult == null) {
+        if (localResults == null || localResults.isEmpty()) {
             Log.i(LogContract.POCKETMARVEL_TAG, "No local data found");
             return true;
         }
 
         //If the local data can expire, and we have passed its expiration date, we must re-fetch
-        if (localResult instanceof Expireable) {
-            Date expires = ((Expireable) localResult).getExpiration();
-            Date now = new Date();
+        for (T localResult : localResults) {
+            if (localResult instanceof Expireable) {
+                Date expires = ((Expireable) localResult).getExpiration();
+                Date now = new Date();
 
-            boolean hasExpired = expires.before(now);
+                boolean hasExpired = expires.before(now);
 
-            if (hasExpired) {
-                Log.i(LogContract.POCKETMARVEL_TAG, "Local data has expired");
-            } else {
+                if (hasExpired) {
+                    Log.i(LogContract.POCKETMARVEL_TAG, "Local data has expired");
+                    return true;
+                }
+
                 Log.i(LogContract.POCKETMARVEL_TAG, "Local data is up-to-date");
             }
-
-            return hasExpired;
         }
 
-        //Local data exists and cannot expire
-        Log.i(LogContract.POCKETMARVEL_TAG, "Local data is static and up-to-date");
+        //Local data either cannot expire or has not expired
         return false;
     }
 
@@ -189,11 +197,11 @@ public abstract class DataFetcher<T> {
      * @param localContent LiveData of the results stored locally, to allow for viewing subsequent
      *                     changes to the DB
      */
-    private void beginPresentingLocalContent(LiveData<T> localContent) {
+    @MainThread
+    private void beginPresentingLocalContent(LiveData<List<T>> localContent) {
         Log.i(LogContract.POCKETMARVEL_TAG, "Single source of truth presenting data to listeners.");
-        result.addSource(localContent, localResult -> {
-            result.setValue(new FetchResult<>(FetchResult.State.Success, localResult, null));
-        });
+        result.addSource(localContent, localResult ->
+                result.setValue(new FetchResult<>(NetworkStatus.Success, localResult, null)));
     }
 
     /**
@@ -203,11 +211,11 @@ public abstract class DataFetcher<T> {
      * @param offlineContent LiveData of the results stored locally, to allow for viewing subsequent
      *                       changes to the DB
      */
-    private void beginPresentingOfflineContent(LiveData<T> offlineContent) {
+    @MainThread
+    private void beginPresentingOfflineContent(LiveData<List<T>> offlineContent) {
         Log.i(LogContract.POCKETMARVEL_TAG, "Device offline, resorting to offline data.");
-        result.addSource(offlineContent, offlineResult -> {
-            result.setValue(new FetchResult<>(FetchResult.State.Offline, offlineResult, "No internet connection available."));
-        });
+        result.addSource(offlineContent, offlineResult ->
+                result.setValue(new FetchResult<>(NetworkStatus.Offline, offlineResult, "No internet connection available.")));
     }
 
     /**
@@ -218,21 +226,24 @@ public abstract class DataFetcher<T> {
      *                      changes to the DB
      * @param errorMessage  A description of what went wrong
      */
-    private void beginPresentingFailedContent(LiveData<T> failedContent, String errorMessage) {
+    @MainThread
+    private void beginPresentingFailedContent(LiveData<List<T>> failedContent, String errorMessage) {
         Log.i(LogContract.POCKETMARVEL_TAG, "Error fetching from remote: " + errorMessage);
-        result.addSource(failedContent, offlineResult -> {
-            result.setValue(new FetchResult<>(FetchResult.State.Failure, offlineResult, errorMessage));
-        });
+        result.addSource(failedContent, offlineResult ->
+                result.setValue(new FetchResult<>(NetworkStatus.Failure, offlineResult, errorMessage)));
     }
 
     @NonNull
-    public LiveData<FetchResult<T>> getResult() {
+    public LiveData<FetchResult<List<T>>> getResult() {
         return result;
     }
 
-    protected abstract LiveData<T> fetchFromDb();
+    @MainThread
+    protected abstract LiveData<List<T>> fetchFromDb();
 
+    @WorkerThread
     protected abstract Call<MarvelDataWrapper<T>> makeApiCall();
 
+    @WorkerThread
     protected abstract void cacheResultsLocally(List<T> results);
 }

@@ -3,40 +3,23 @@ package dk.sdu.pocketmarvel.repository;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-public class FetchResult<T> {
+/**
+ * Represents the current status of fetching some data, including a descriptive message and the best
+ * representation of the result which is currently available. Depending on the
+ * {@link NetworkStatus}, this representation might only be temporary.
+ */
+public class FetchResult<T> extends FetchStatus {
 
-    @NonNull
-    private State state;
     @Nullable
     private T result;
-    @Nullable
-    private String message;
 
-    public FetchResult(@NonNull State state, @Nullable T result, @Nullable String message) {
-        this.state = state;
+    public FetchResult(@NonNull NetworkStatus state, @Nullable T result, @Nullable String message) {
+        super(state, message);
         this.result = result;
-        this.message = message;
-    }
-
-    @NonNull
-    public State getState() {
-        return state;
     }
 
     @Nullable
     public T getResult() {
         return result;
-    }
-
-    @Nullable
-    public String getMessage() {
-        return message;
-    }
-
-    public enum State {
-        Fetching,
-        Success,
-        Failure,
-        Offline
     }
 }

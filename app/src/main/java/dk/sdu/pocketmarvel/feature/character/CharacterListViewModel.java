@@ -1,44 +1,34 @@
 package dk.sdu.pocketmarvel.feature.character;
 
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
-import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
+import android.support.annotation.NonNull;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import dk.sdu.pocketmarvel.repository.character.CharacterDataSourceFactory;
+import dk.sdu.pocketmarvel.repository.FetchStatus;
+import dk.sdu.pocketmarvel.repository.PagedData;
+import dk.sdu.pocketmarvel.repository.character.CharacterRepository;
 import dk.sdu.pocketmarvel.vo.Character;
 
-public class CharacterListViewModel extends ViewModel {
+public class CharacterListViewModel extends AndroidViewModel {
 
-    private LiveData<PagedList<Character>> charactersLiveData;
-    //    private LiveData<FetchError> errorLiveData;
-    private ExecutorService fetchExecutor;
+    private PagedData<Character> pagedData;
 
-    public CharacterListViewModel() {
+    public CharacterListViewModel(@NonNull Application application) {
+        super(application);
         init();
     }
 
     private void init() {
-        fetchExecutor = Executors.newSingleThreadExecutor();
+        pagedData = CharacterRepository.getInstance(getApplication().getApplicationContext())
+                .getCharactersPaged();
+    }
 
-        PagedList.Config pagedConfig = new PagedList.Config.Builder()
-                .setPageSize(20)
-                .setInitialLoadSizeHint(60)
-                .setPrefetchDistance(20)
-                .setEnablePlaceholders(true)
-                .build();
-
-        CharacterDataSourceFactory dataSourceFactory = new CharacterDataSourceFactory();
-
-//        errorLiveData = Transformations.switchMap(dataSourceFactory.getSourceLiveData(),
-//                CharacterDataSource::getErrorLiveData);
-
-        charactersLiveData = new LivePagedListBuilder<>(dataSourceFactory, pagedConfig)
-                .setFetchExecutor(fetchExecutor)
-                .build();
+    public void setSearchTerm(String searchTerm) {
+        pagedData.setSearchTerm(searchTerm);
     }
 
     /**
@@ -48,16 +38,15 @@ public class CharacterListViewModel extends ViewModel {
      * @return A list of Characters that supports paging.
      */
     public LiveData<PagedList<Character>> getCharactersLiveData() {
-        return charactersLiveData;
+        return pagedData.getPagedListLiveData();
     }
 
-//    public LiveData<FetchError> getErrorLiveData() {
-//        return errorLiveData;
-//    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        fetchExecutor.shutdownNow();
+    /**
+     * Get a live representation of the network status for paging.
+     *
+     * @return A live representation of the network status for paging.
+     */
+    public LiveData<FetchStatus> getNetworkStatusLiveData() {
+        return pagedData.getNetworkStatus();
     }
 }

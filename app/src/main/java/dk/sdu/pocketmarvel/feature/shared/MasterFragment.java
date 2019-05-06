@@ -7,8 +7,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -37,9 +41,34 @@ public abstract class MasterFragment extends Fragment implements OnAdapterSelect
         RecyclerView recyclerView = view.findViewById(R.id.rv_selection_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
-
         recyclerView.setAdapter(getAdapter());
+
+        setHasOptionsMenu(true);
+
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_search, menu);
+
+        final MenuItem searchItem = menu.findItem(R.id.sv_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                onSearch(s);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if (s.isEmpty()) {
+                    onSearch(null);
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -49,5 +78,7 @@ public abstract class MasterFragment extends Fragment implements OnAdapterSelect
         }
     }
 
-    public abstract RecyclerView.Adapter getAdapter();
+    protected abstract RecyclerView.Adapter getAdapter();
+
+    protected abstract void onSearch(String searchTerm);
 }
