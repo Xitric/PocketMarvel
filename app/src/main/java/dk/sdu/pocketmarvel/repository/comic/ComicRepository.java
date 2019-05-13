@@ -67,9 +67,13 @@ public class ComicRepository {
             @Override
             protected LiveData<Comic> fetchFromDb() {
                 return Transformations.map(marvelDatabase.comicDao().load(comicId), comicWithImages -> {
-                    Comic comic = comicWithImages.comic;
-                    comic.setImages(comicWithImages.images);
-                    return comic;
+                    if (comicWithImages == null) {
+                        return null;
+                    } else {
+                        Comic comic = comicWithImages.comic;
+                        comic.setImages(comicWithImages.images);
+                        return comic;
+                    }
                 });
             }
 
