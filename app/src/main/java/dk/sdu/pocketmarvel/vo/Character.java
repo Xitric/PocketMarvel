@@ -4,6 +4,7 @@ import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.RoomWarnings;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
@@ -14,6 +15,7 @@ import java.util.Objects;
 
 import dk.sdu.pocketmarvel.repository.Expireable;
 
+@SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
 @Entity
 public class Character implements Expireable {
 
@@ -35,7 +37,7 @@ public class Character implements Expireable {
     private String resourceURI;
     @SerializedName("thumbnail")
     @Expose
-    @Embedded
+    @Embedded(prefix = "thumbnail")
     private Image thumbnail;
     @SerializedName("comics")
     @Expose

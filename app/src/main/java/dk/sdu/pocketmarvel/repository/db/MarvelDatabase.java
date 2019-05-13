@@ -9,13 +9,15 @@ import dk.sdu.pocketmarvel.vo.Character;
 import dk.sdu.pocketmarvel.vo.CharacterComics;
 import dk.sdu.pocketmarvel.vo.Comic;
 import dk.sdu.pocketmarvel.vo.ComicSummary;
+import dk.sdu.pocketmarvel.vo.Image;
 
 @android.arch.persistence.room.Database(
         entities = {
                 Character.class,
                 ComicSummary.class,
                 CharacterComics.class,
-                Comic.class
+                Comic.class,
+                Image.class
         },
         version = 1)
 @TypeConverters({DateTypeConverter.class})

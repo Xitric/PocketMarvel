@@ -2,17 +2,21 @@ package dk.sdu.pocketmarvel.vo;
 
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.RoomWarnings;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import dk.sdu.pocketmarvel.repository.Expireable;
 
+@SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
 @Entity
 public class Comic implements Expireable {
 
@@ -31,23 +35,21 @@ public class Comic implements Expireable {
     private String resourceURI;
     @SerializedName("thumbnail")
     @Expose
-    @Embedded
+    @Embedded(prefix = "thumbnail")
     private Image thumbnail;
-//    @SerializedName("images")
-//    @Expose
-//    @Embedded
-//    private List<Image> images = null;
+    @SerializedName("images")
+    @Expose
+    @Ignore
+    private List<Image> images = null;
     //    @SerializedName("digitalId")
 //    @Expose
 //    private String digitalId;
-
-    //    @SerializedName("issueNumber")
-//    @Expose
-//    private String issueNumber;
-//    @SerializedName("variantDescription")
-//    @Expose
-//    private String variantDescription;
-
+    @SerializedName("issueNumber")
+    @Expose
+    private String issueNumber;
+    @SerializedName("variantDescription")
+    @Expose
+    private String variantDescription;
     //    @SerializedName("modified")
 //    @Expose
 //    private String modified;
@@ -69,10 +71,10 @@ public class Comic implements Expireable {
 //    @SerializedName("format")
 //    @Expose
 //    private String format;
-//    @SerializedName("pageCount")
-//    @Expose
-//    private String pageCount;
-//    @SerializedName("textObjects")
+    @SerializedName("pageCount")
+    @Expose
+    private String pageCount;
+    //    @SerializedName("textObjects")
 //    @Expose
 //    private List<TextObject> textObjects = null;
 //    @SerializedName("urls")
@@ -150,16 +152,15 @@ public class Comic implements Expireable {
         this.thumbnail = thumbnail;
     }
 
-//    public List<Image> getImages() {
-//        return images;
-//    }
-//
-//    public void setImages(List<Image> images) {
-//        this.images = images;
-//    }
+    public List<Image> getImages() {
+        return images;
+    }
 
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
 
-//    public String getDigitalId() {
+    //    public String getDigitalId() {
 //        return digitalId;
 //    }
 //
@@ -167,25 +168,23 @@ public class Comic implements Expireable {
 //        this.digitalId = digitalId;
 //    }
 //
+    public String getIssueNumber() {
+        return issueNumber;
+    }
 
-//
-//    public String getIssueNumber() {
-//        return issueNumber;
-//    }
-//
-//    public void setIssueNumber(String issueNumber) {
-//        this.issueNumber = issueNumber;
-//    }
-//
-//    public String getVariantDescription() {
-//        return variantDescription;
-//    }
-//
-//    public void setVariantDescription(String variantDescription) {
-//        this.variantDescription = variantDescription;
-//    }
+    public void setIssueNumber(String issueNumber) {
+        this.issueNumber = issueNumber;
+    }
 
-//    public String getModified() {
+    public String getVariantDescription() {
+        return variantDescription;
+    }
+
+    public void setVariantDescription(String variantDescription) {
+        this.variantDescription = variantDescription;
+    }
+
+    //    public String getModified() {
 //        return modified;
 //    }
 //
@@ -241,13 +240,13 @@ public class Comic implements Expireable {
 //        this.format = format;
 //    }
 //
-//    public String getPageCount() {
-//        return pageCount;
-//    }
-//
-//    public void setPageCount(String pageCount) {
-//        this.pageCount = pageCount;
-//    }
+    public String getPageCount() {
+        return pageCount;
+    }
+
+    public void setPageCount(String pageCount) {
+        this.pageCount = pageCount;
+    }
 //
 //    public List<TextObject> getTextObjects() {
 //        return textObjects;

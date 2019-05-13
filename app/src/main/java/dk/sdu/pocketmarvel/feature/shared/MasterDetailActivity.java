@@ -16,7 +16,7 @@ public abstract class MasterDetailActivity extends AppCompatActivity implements 
 
         if (savedInstanceState == null) {
             Bundle bundle = getIntent().getExtras();
-            if(bundle != null) {
+            if (bundle != null) {
                 int id = bundle.getInt(DetailContract.CONTENT_ID, -1);
                 if (id != -1) {
                     onSelected(id);

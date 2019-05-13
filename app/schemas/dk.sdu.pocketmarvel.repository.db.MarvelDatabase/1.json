@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "63dbd3bc9217c91ca2feaafc9a6da509",
+    "identityHash": "035c1c9c1141423ec3c1f6bb2be0fa9f",
     "entities": [
       {
         "tableName": "Character",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `modified` TEXT, `resourceURI` TEXT, `expiration` INTEGER, `thumbnail_path` TEXT, `thumbnail_extension` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `modified` TEXT, `resourceURI` TEXT, `expiration` INTEGER, `thumbnailid` INTEGER, `thumbnailcomicId` INTEGER, `thumbnailthumbnail_path` TEXT, `thumbnailthumbnail_extension` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -45,14 +45,26 @@
             "notNull": false
           },
           {
+            "fieldPath": "thumbnail.id",
+            "columnName": "thumbnailid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "thumbnail.comicId",
+            "columnName": "thumbnailcomicId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
             "fieldPath": "thumbnail.path",
-            "columnName": "thumbnail_path",
+            "columnName": "thumbnailthumbnail_path",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "thumbnail.extension",
-            "columnName": "thumbnail_extension",
+            "columnName": "thumbnailthumbnail_extension",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -167,7 +179,7 @@
       },
       {
         "tableName": "Comic",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT, `description` TEXT, `resourceURI` TEXT, `expiration` INTEGER, `thumbnail_path` TEXT, `thumbnail_extension` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT, `description` TEXT, `resourceURI` TEXT, `issueNumber` TEXT, `variantDescription` TEXT, `pageCount` TEXT, `expiration` INTEGER, `thumbnailid` INTEGER, `thumbnailcomicId` INTEGER, `thumbnailthumbnail_path` TEXT, `thumbnailthumbnail_extension` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -194,20 +206,50 @@
             "notNull": false
           },
           {
+            "fieldPath": "issueNumber",
+            "columnName": "issueNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "variantDescription",
+            "columnName": "variantDescription",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pageCount",
+            "columnName": "pageCount",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
             "fieldPath": "expiration",
             "columnName": "expiration",
             "affinity": "INTEGER",
             "notNull": false
           },
           {
+            "fieldPath": "thumbnail.id",
+            "columnName": "thumbnailid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "thumbnail.comicId",
+            "columnName": "thumbnailcomicId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
             "fieldPath": "thumbnail.path",
-            "columnName": "thumbnail_path",
+            "columnName": "thumbnailthumbnail_path",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "thumbnail.extension",
-            "columnName": "thumbnail_extension",
+            "columnName": "thumbnailthumbnail_extension",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -220,11 +262,61 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "Image",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `comicId` INTEGER NOT NULL, `thumbnail_path` TEXT, `thumbnail_extension` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`comicId`) REFERENCES `Comic`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "comicId",
+            "columnName": "comicId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "path",
+            "columnName": "thumbnail_path",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "extension",
+            "columnName": "thumbnail_extension",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Comic",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "comicId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"63dbd3bc9217c91ca2feaafc9a6da509\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"035c1c9c1141423ec3c1f6bb2be0fa9f\")"
     ]
   }
 }

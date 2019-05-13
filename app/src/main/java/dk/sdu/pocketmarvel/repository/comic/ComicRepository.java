@@ -1,6 +1,7 @@
 package dk.sdu.pocketmarvel.repository.comic;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Transformations;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 import android.content.Context;
@@ -65,7 +66,11 @@ public class ComicRepository {
         return new SingularDataFetcher<Comic>(MarvelExecutors.getInstance()) {
             @Override
             protected LiveData<Comic> fetchFromDb() {
-                return marvelDatabase.comicDao().load(comicId);
+                return Transformations.map(marvelDatabase.comicDao().load(comicId), comicWithImages -> {
+                    Comic comic = comicWithImages.comic;
+                    comic.setImages(comicWithImages.images);
+                    return comic;
+                });
             }
 
             @Override
