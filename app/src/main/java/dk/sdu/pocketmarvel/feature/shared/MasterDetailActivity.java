@@ -20,7 +20,10 @@ public abstract class MasterDetailActivity extends AppCompatActivity implements 
                 int id = bundle.getInt(DetailContract.CONTENT_ID, -1);
                 if (id != -1) {
                     onSelected(id);
-                    return;
+
+                    if (findViewById(R.id.vg_detail_fragment) == null) {
+                        return;
+                    }
                 }
             }
 
