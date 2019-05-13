@@ -1,6 +1,7 @@
 package dk.sdu.pocketmarvel.feature.character;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import dk.sdu.pocketmarvel.LogContract;
 import dk.sdu.pocketmarvel.R;
+import dk.sdu.pocketmarvel.feature.comic.ComicActivity;
 import dk.sdu.pocketmarvel.feature.shared.DetailContract;
 import dk.sdu.pocketmarvel.feature.shared.OnAdapterSelectionListener;
 import dk.sdu.pocketmarvel.repository.GlideApp;
@@ -80,9 +82,8 @@ public class CharacterFragment extends Fragment implements OnAdapterSelectionLis
 
     @Override
     public void onSelected(int id) {
-        //TODO: Somehow show the comic detail view from here
-//        Intent intent = new Intent(this.getContext(), ComicActivity.class);
-//        intent.putExtra(DetailContract.CONTENT_ID, id);
-//        startActivity(intent);
+        Intent intent = new Intent(this.getContext(), ComicActivity.class);
+        intent.putExtra(DetailContract.CONTENT_ID, id);
+        startActivity(intent);
     }
 }

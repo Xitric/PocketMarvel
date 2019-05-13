@@ -2,6 +2,7 @@ package dk.sdu.pocketmarvel.feature.shared;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import dk.sdu.pocketmarvel.R;
@@ -14,6 +15,15 @@ public abstract class MasterDetailActivity extends AppCompatActivity implements 
         setContentView(R.layout.activity_master_detail);
 
         if (savedInstanceState == null) {
+            Bundle bundle = getIntent().getExtras();
+            if (bundle != null) {
+                int id = bundle.getInt(DetailContract.CONTENT_ID, -1);
+                if (id != -1) {
+                    onSelected(id);
+                    return;
+                }
+            }
+
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.vg_primary_fragment, getMasterFragment())
                     .commit();
@@ -37,10 +47,14 @@ public abstract class MasterDetailActivity extends AppCompatActivity implements 
      * Replace the master fragment with a detail fragment.
      */
     private void pushDetailFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.vg_primary_fragment, fragment)
-                .addToBackStack(null)
-                .commit();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
+                .replace(R.id.vg_primary_fragment, fragment);
+
+        if (getSupportFragmentManager().findFragmentById(R.id.vg_primary_fragment) != null) {
+            transaction.addToBackStack(null);
+        }
+
+        transaction.commit();
     }
 
     /**

@@ -2,8 +2,6 @@ package dk.sdu.pocketmarvel.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
@@ -12,10 +10,9 @@ import android.util.Log;
 import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import dk.sdu.pocketmarvel.LogContract;
+import dk.sdu.pocketmarvel.MarvelExecutors;
 import dk.sdu.pocketmarvel.vo.MarvelDataContainer;
 import dk.sdu.pocketmarvel.vo.MarvelDataWrapper;
 import retrofit2.Call;
@@ -44,8 +41,12 @@ public abstract class DataFetcher<T> {
     @NonNull
     private MediatorLiveData<FetchResult<List<T>>> result;
 
-    public DataFetcher() {
-        result = new MediatorLiveData<>();
+    @NonNull
+    private MarvelExecutors executors;
+
+    public DataFetcher(@NonNull MarvelExecutors executors) {
+        this.result = new MediatorLiveData<>();
+        this.executors = executors;
     }
 
     /**
@@ -68,8 +69,7 @@ public abstract class DataFetcher<T> {
                 //data - a good temporary value
                 result.setValue(new FetchResult<>(NetworkStatus.Fetching, dbResult, null));
 
-                //TODO: MEGA CRAZY Temporary
-                Executors.newSingleThreadExecutor().execute(this::fetchFromApi);
+                executors.getBackground().execute(this::fetchFromApi);
             } else {
                 //The local data is good enough, so whenever a new value is available in the
                 //database, we just pass it along
@@ -131,9 +131,7 @@ public abstract class DataFetcher<T> {
      */
     @MainThread
     private void handleSuccessfulApiResponse(List<T> remoteResults) {
-        //TODO: Extremely temporary until we can inject some executors!
-        Executor background = Executors.newSingleThreadExecutor();
-        background.execute(() -> {
+        executors.getBackground().execute(() -> {
             //Set results to expire in 24 hours
             for (T remoteResult : remoteResults) {
                 if (remoteResult instanceof Expireable) {
@@ -146,10 +144,8 @@ public abstract class DataFetcher<T> {
             //Store in DB
             cacheResultsLocally(remoteResults);
 
-            //TODO: Also temporary until we can inject a shared main executor (we can make our own Executor subtype that uses a Handler and Looper internally)
             //Notify listeners on main thread
-            Handler h = new Handler(Looper.getMainLooper());
-            h.post(() ->
+            executors.getMain().execute(() ->
                     beginPresentingLocalContent(fetchFromDb()));
         });
     }

@@ -9,6 +9,7 @@ import android.support.annotation.WorkerThread;
 import java.util.Collections;
 import java.util.List;
 
+import dk.sdu.pocketmarvel.MarvelExecutors;
 import dk.sdu.pocketmarvel.vo.MarvelDataWrapper;
 import retrofit2.Call;
 
@@ -21,11 +22,12 @@ public abstract class SingularDataFetcher<T> {
 
     private DataFetcher<T> listFetcher;
 
-    public SingularDataFetcher() {
-        listFetcher = new DataFetcher<T>() {
+    public SingularDataFetcher(MarvelExecutors executors) {
+        listFetcher = new DataFetcher<T>(executors) {
             @Override
             protected LiveData<List<T>> fetchFromDb() {
-                return Transformations.map(SingularDataFetcher.this.fetchFromDb(), Collections::singletonList);
+                return Transformations.map(SingularDataFetcher.this.fetchFromDb(), result ->
+                        result == null ? null : Collections.singletonList(result));
             }
 
             @Override
@@ -67,7 +69,7 @@ public abstract class SingularDataFetcher<T> {
     @MainThread
     protected abstract LiveData<T> fetchFromDb();
 
-    @MainThread
+    @WorkerThread
     protected abstract Call<MarvelDataWrapper<T>> makeApiCall();
 
     @WorkerThread
