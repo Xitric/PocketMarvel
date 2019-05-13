@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,13 @@ public class ComicListFragment extends MasterFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         RecyclerView recyclerView = view.findViewById(R.id.rv_selection_list);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+
+        int screenOrientation = getResources().getConfiguration().orientation;
+        if (screenOrientation == 1) {
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        } else {
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
+        }
 
         return view;
     }
