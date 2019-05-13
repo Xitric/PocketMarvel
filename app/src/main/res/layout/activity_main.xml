@@ -7,38 +7,16 @@
     tools:context=".feature.home.MainActivity">
 
     <Button
-        android:id="@+id/btn_stories"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/stories"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_series" />
-
-    <Button
         android:id="@+id/btn_characters"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onCharactersAction"
         android:text="@string/characters"
-        app:layout_constraintBottom_toTopOf="@+id/btn_comics"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btn_creators"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/creators"
-        app:layout_constraintBottom_toTopOf="@+id/btn_events"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_comics" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.70" />
 
     <Button
         android:id="@+id/btn_comics"
@@ -46,31 +24,9 @@
         android:layout_height="wrap_content"
         android:onClick="onComicsAction"
         android:text="@string/comics"
-        app:layout_constraintBottom_toTopOf="@+id/btn_creators"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_characters" />
-
-    <Button
-        android:id="@+id/btn_series"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/series"
-        app:layout_constraintBottom_toTopOf="@+id/btn_stories"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_events" />
-
-    <Button
-        android:id="@+id/btn_events"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/events"
-        app:layout_constraintBottom_toTopOf="@+id/btn_series"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_creators" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.30" />
 </android.support.constraint.ConstraintLayout>
