@@ -32,6 +32,17 @@ public class ComicFragment extends Fragment {
     private TextView comicIssue;
     private TextView comicPages;
     private GlideRequests glide;
+    private ImageListener carouselListener = (position, imageView) -> {
+        Comic comic = comicViewModel.getComic().getValue().getResult();
+        glide.clear(imageView);
+        if (position == 0) {
+            glide.load(comic.getThumbnail().getPath() + "/portrait_uncanny." + comic.getThumbnail().getExtension())
+                    .into(imageView);
+        } else {
+            glide.load(comic.getImages().get(position).getPath() + "/portrait_uncanny." + comic.getImages().get(position).getExtension())
+                    .into(imageView);
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,22 +94,12 @@ public class ComicFragment extends Fragment {
             } else if (result.getState() == NetworkStatus.Fetching) {
                 comicTitle.setText(R.string.loading);
                 comicDescription.setText(R.string.loading);
+                comicIssue.setText(R.string.loading);
+                comicPages.setText(R.string.loading);
             }
         });
 
         return view;
     }
-
-    ImageListener carouselListener = (position, imageView) -> {
-        Comic comic = comicViewModel.getComic().getValue().getResult();
-        glide.clear(imageView);
-        if (position == 0) {
-            glide.load(comic.getThumbnail().getPath() + "/portrait_uncanny." + comic.getThumbnail().getExtension())
-                    .into(imageView);
-        } else {
-            glide.load(comic.getImages().get(position).getPath() + "/portrait_uncanny." + comic.getImages().get(position).getExtension())
-                    .into(imageView);
-        }
-    };
 
 }
