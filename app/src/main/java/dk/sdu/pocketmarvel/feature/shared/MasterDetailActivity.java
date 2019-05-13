@@ -17,16 +17,19 @@ public abstract class MasterDetailActivity extends AppCompatActivity implements 
         if (savedInstanceState == null) {
             Bundle bundle = getIntent().getExtras();
             if (bundle != null) {
+                //If this activity was started with an id, show the detail view immediately
                 int id = bundle.getInt(DetailContract.CONTENT_ID, -1);
                 if (id != -1) {
                     onSelected(id);
 
+                    //If we cannot show both the master and the detail, just skip the master
                     if (findViewById(R.id.vg_detail_fragment) == null) {
                         return;
                     }
                 }
             }
 
+            //Display master fragment
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.vg_primary_fragment, getMasterFragment())
                     .commit();

@@ -101,5 +101,4 @@ public class ComicFragment extends Fragment {
 
         return view;
     }
-
 }
