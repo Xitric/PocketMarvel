@@ -26,7 +26,8 @@ public abstract class SingularDataFetcher<T> {
         listFetcher = new DataFetcher<T>(executors) {
             @Override
             protected LiveData<List<T>> fetchFromDb() {
-                return Transformations.map(SingularDataFetcher.this.fetchFromDb(), Collections::singletonList);
+                return Transformations.map(SingularDataFetcher.this.fetchFromDb(), result ->
+                        result == null ? null : Collections.singletonList(result));
             }
 
             @Override

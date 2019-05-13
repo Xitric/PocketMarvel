@@ -35,7 +35,7 @@ public interface ComicDao {
     @Insert(onConflict = REPLACE)
     void saveComics(List<Comic> comics);
 
-    @Query("SELECT * FROM Comic  WHERE Comic.id = :comicId")
+    @Query("SELECT * FROM Comic WHERE Comic.id = :comicId")
     LiveData<Comic> load(int comicId);
 
     @Query("SELECT * FROM Comic ORDER BY Comic.title")

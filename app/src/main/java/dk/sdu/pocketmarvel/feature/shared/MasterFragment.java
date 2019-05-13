@@ -58,6 +58,7 @@ public abstract class MasterFragment extends Fragment implements OnAdapterSelect
             @Override
             public boolean onQueryTextSubmit(String s) {
                 onSearch(s);
+                searchView.clearFocus();
                 return true;
             }
 
