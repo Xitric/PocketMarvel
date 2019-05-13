@@ -6,8 +6,8 @@ import android.arch.paging.PagedList;
 import android.content.Context;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
+import dk.sdu.pocketmarvel.MarvelExecutors;
 import dk.sdu.pocketmarvel.repository.FetchResult;
 import dk.sdu.pocketmarvel.repository.PagedData;
 import dk.sdu.pocketmarvel.repository.SingularDataFetcher;
@@ -31,12 +31,12 @@ public class CharacterRepository {
     }
 
     private void refreshCharacters() {
-        Executors.newSingleThreadExecutor().execute(() ->
+        MarvelExecutors.getInstance().getBackground().execute(() ->
                 marvelDatabase.characterDao().deleteAllCharacters());
     }
 
     public PagedData<Character> getCharactersPaged() {
-        Executor fetchExecutor = Executors.newSingleThreadExecutor();
+        Executor fetchExecutor = MarvelExecutors.getInstance().getBackground();
 
         PagedList.Config pagedConfig = new PagedList.Config.Builder()
                 .setPageSize(20)
@@ -56,7 +56,7 @@ public class CharacterRepository {
     }
 
     public LiveData<FetchResult<Character>> getCharacter(int id) {
-        return new SingularDataFetcher<Character>() {
+        return new SingularDataFetcher<Character>(MarvelExecutors.getInstance()) {
             @Override
             protected LiveData<Character> fetchFromDb() {
                 return marvelDatabase.characterDao().load(id);

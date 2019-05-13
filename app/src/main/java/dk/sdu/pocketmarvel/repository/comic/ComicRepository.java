@@ -7,8 +7,8 @@ import android.content.Context;
 
 import java.util.List;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
+import dk.sdu.pocketmarvel.MarvelExecutors;
 import dk.sdu.pocketmarvel.repository.FetchResult;
 import dk.sdu.pocketmarvel.repository.PagedData;
 import dk.sdu.pocketmarvel.repository.SingularDataFetcher;
@@ -37,12 +37,12 @@ public class ComicRepository {
     }
 
     private void refreshComics() {
-        Executors.newSingleThreadExecutor().execute(() ->
+        MarvelExecutors.getInstance().getBackground().execute(() ->
                 marvelDatabase.comicDao().deleteAllComics());
     }
 
     public PagedData<Comic> getComicsPaged() {
-        Executor fetchExecutor = Executors.newSingleThreadExecutor();
+        Executor fetchExecutor = MarvelExecutors.getInstance().getBackground();
 
         PagedList.Config pagedConfig = new PagedList.Config.Builder()
                 .setPageSize(12)
@@ -62,7 +62,7 @@ public class ComicRepository {
     }
 
     public LiveData<FetchResult<Comic>> getComic(int comicId) {
-        return new SingularDataFetcher<Comic>() {
+        return new SingularDataFetcher<Comic>(MarvelExecutors.getInstance()) {
             @Override
             protected LiveData<Comic> fetchFromDb() {
                 return marvelDatabase.comicDao().load(comicId);

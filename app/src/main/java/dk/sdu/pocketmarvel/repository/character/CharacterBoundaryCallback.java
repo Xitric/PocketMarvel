@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import dk.sdu.pocketmarvel.MarvelExecutors;
 import dk.sdu.pocketmarvel.repository.AbstractBoundaryCallback;
 import dk.sdu.pocketmarvel.repository.DataFetcher;
 import dk.sdu.pocketmarvel.repository.api.MarvelClient;
@@ -23,7 +24,7 @@ public class CharacterBoundaryCallback extends AbstractBoundaryCallback<Characte
 
     @Override
     public void onZeroItemsLoaded() {
-        setFetcher(new DataFetcher<Character>() {
+        setFetcher(new DataFetcher<Character>(MarvelExecutors.getInstance()) {
             @Override
             protected LiveData<List<Character>> fetchFromDb() {
                 //Simulate an empty database
@@ -46,7 +47,7 @@ public class CharacterBoundaryCallback extends AbstractBoundaryCallback<Characte
 
     @Override
     public void onItemAtEndLoaded(@NonNull Character itemAtEnd) {
-        setFetcher(new DataFetcher<Character>() {
+        setFetcher(new DataFetcher<Character>(MarvelExecutors.getInstance()) {
             @Override
             protected LiveData<List<Character>> fetchFromDb() {
                 //Simulate an empty database
