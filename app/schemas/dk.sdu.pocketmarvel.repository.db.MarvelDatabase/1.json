@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "035c1c9c1141423ec3c1f6bb2be0fa9f",
+    "identityHash": "40ae808781c79594714d7bdfccf0dc49",
     "entities": [
       {
         "tableName": "Character",
@@ -265,7 +265,7 @@
       },
       {
         "tableName": "Image",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `comicId` INTEGER NOT NULL, `thumbnail_path` TEXT, `thumbnail_extension` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`comicId`) REFERENCES `Comic`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `comicId` INTEGER NOT NULL, `thumbnail_path` TEXT, `thumbnail_extension` TEXT, FOREIGN KEY(`comicId`) REFERENCES `Comic`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -296,9 +296,18 @@
           "columnNames": [
             "id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_Image_comicId",
+            "unique": false,
+            "columnNames": [
+              "comicId"
+            ],
+            "createSql": "CREATE  INDEX `index_Image_comicId` ON `${TABLE_NAME}` (`comicId`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "Comic",
@@ -316,7 +325,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"035c1c9c1141423ec3c1f6bb2be0fa9f\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"40ae808781c79594714d7bdfccf0dc49\")"
     ]
   }
 }

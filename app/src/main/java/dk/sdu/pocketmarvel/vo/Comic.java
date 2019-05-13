@@ -16,7 +16,8 @@ import java.util.Objects;
 
 import dk.sdu.pocketmarvel.repository.Expireable;
 
-@SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
+@SuppressWarnings({RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED,
+        RoomWarnings.INDEX_FROM_EMBEDDED_ENTITY_IS_DROPPED})
 @Entity
 public class Comic implements Expireable {
 
