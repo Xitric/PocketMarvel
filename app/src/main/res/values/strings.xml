@@ -8,4 +8,8 @@
     <string name="events">Events</string>
     <string name="superhero_thumbnail">Superhero Thumbnail</string>
     <string name="search">Search…</string>
+    <string name="missingDescription">Discription is missing</string>
+    <string name="loading">Loading…</string>
+    <string name="issue">Issue:</string>
+    <string name="page_count">Page count:</string>
 </resources>

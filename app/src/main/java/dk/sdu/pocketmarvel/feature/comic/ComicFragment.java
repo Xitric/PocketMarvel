@@ -1,6 +1,7 @@
 package dk.sdu.pocketmarvel.feature.comic;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,20 +10,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageListener;
 
 import dk.sdu.pocketmarvel.LogContract;
 import dk.sdu.pocketmarvel.R;
 import dk.sdu.pocketmarvel.feature.shared.DetailContract;
 import dk.sdu.pocketmarvel.repository.GlideApp;
+import dk.sdu.pocketmarvel.repository.GlideRequests;
 import dk.sdu.pocketmarvel.repository.NetworkStatus;
+import dk.sdu.pocketmarvel.vo.Comic;
 
 public class ComicFragment extends Fragment {
 
-    private ImageView comicThumbnail;
+    private ComicViewModel comicViewModel;
+    private CarouselView carouselView;
     private TextView comicTitle;
     private TextView comicDescription;
+    private TextView comicIssue;
+    private TextView comicPages;
+    private GlideRequests glide;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,16 +39,26 @@ public class ComicFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        glide = GlideApp.with(context);
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.comic_fragment, container, false);
-        comicThumbnail = view.findViewById(R.id.iv_comic);
+        carouselView = view.findViewById(R.id.cv_comic);
         comicTitle = view.findViewById(R.id.tv_comic);
         comicDescription = view.findViewById(R.id.tv_comic_description);
+        comicIssue = view.findViewById(R.id.tv_comic_issue);
+        comicPages = view.findViewById(R.id.tv_comic_pageCount);
 
         int id = getArguments() == null ? -1 : getArguments().getInt(DetailContract.CONTENT_ID);
-        ComicViewModel comicViewModel = ViewModelProviders.of(this).get(ComicViewModel.class);
+        comicViewModel = ViewModelProviders.of(this).get(ComicViewModel.class);
         comicViewModel.init(id);
+
+        carouselView.setImageListener(carouselListener);
 
         comicViewModel.getComic().observe(this, result -> {
             if (result.getState() != NetworkStatus.Success && result.getState() != NetworkStatus.Fetching) {
@@ -51,22 +70,35 @@ public class ComicFragment extends Fragment {
                 String description = result.getResult().getDescription();
 
                 if (description == null || description.isEmpty()) {
-                    comicDescription.setText("Discription is missing");
+                    comicDescription.setText(R.string.missingDescription);
                 } else {
                     comicDescription.setText(description);
                 }
 
-                GlideApp.with(getContext())
-                        .load(result.getResult().getThumbnail().getPath() + "/portrait_uncanny." + result.getResult().getThumbnail().getExtension())
-                        .into(comicThumbnail);
+                comicIssue.setText(String.valueOf(result.getResult().getIssueNumber()));
+                comicPages.setText(String.valueOf(result.getResult().getPageCount()));
+
+                carouselView.setPageCount(result.getResult().getImages().size());
 
             } else if (result.getState() == NetworkStatus.Fetching) {
-                comicTitle.setText("Loading...");
-                comicDescription.setText("Loading...");
+                comicTitle.setText(R.string.loading);
+                comicDescription.setText(R.string.loading);
             }
         });
 
         return view;
     }
+
+    ImageListener carouselListener = (position, imageView) -> {
+        Comic comic = comicViewModel.getComic().getValue().getResult();
+        glide.clear(imageView);
+        if (position == 0) {
+            glide.load(comic.getThumbnail().getPath() + "/portrait_uncanny." + comic.getThumbnail().getExtension())
+                    .into(imageView);
+        } else {
+            glide.load(comic.getImages().get(position).getPath() + "/portrait_uncanny." + comic.getImages().get(position).getExtension())
+                    .into(imageView);
+        }
+    };
 
 }

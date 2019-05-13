@@ -3,6 +3,7 @@ package dk.sdu.pocketmarvel.vo;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -10,16 +11,22 @@ import com.google.gson.annotations.SerializedName;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-@Entity(foreignKeys = {
-        @ForeignKey(entity = Comic.class,
-                parentColumns = "id",
-                childColumns = "comicId",
-                onDelete = CASCADE,
-                onUpdate = CASCADE)
-})
+@Entity(
+        foreignKeys = {
+                @ForeignKey(entity = Comic.class,
+                        parentColumns = "id",
+                        childColumns = "comicId",
+                        onDelete = CASCADE,
+                        onUpdate = CASCADE)
+        },
+        indices = {
+                @Index(value = {
+                        "comicId"
+                })
+        })
 public class Image {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private int comicId;
     @SerializedName("path")

@@ -61,4 +61,7 @@ dependencies {
     // For creating a local database
     implementation "android.arch.persistence.room:runtime:1.1.1"
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+
+    // For carousels
+    implementation 'com.synnapps:carouselview:0.1.5'
 }
