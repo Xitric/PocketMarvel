@@ -58,7 +58,7 @@ public class CharacterAdapter extends PagedListAdapter<Character, CharacterAdapt
         Character character = getItem(i);
         if (character == null) {
             //Still fetching, show placeholder
-            characterViewHolder.character.setText("Please wait...");
+            characterViewHolder.character.setText(R.string.loading);
         } else {
             characterViewHolder.character.setText(character.getName());
 

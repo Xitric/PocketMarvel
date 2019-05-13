@@ -39,7 +39,7 @@ public class CharacterComicsAdapter extends RecyclerView.Adapter<CharacterComics
         comicViewHolder.comicName.setText(comics.get(i).getName());
 
         if (comics.get(i).getYear() == -1) {
-            comicViewHolder.comicYear.setText("Unknown year");
+            comicViewHolder.comicYear.setText(R.string.unknown_year);
         } else {
             comicViewHolder.comicYear.setText(String.valueOf(comics.get(i).getYear()));
         }

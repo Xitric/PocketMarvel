@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="characters">Postacie</string>
+    <string name="comics">Komiksy</string>
+    <string name="creators">Twórcy</string>
+    <string name="events">Wydarzenia</string>
+    <string name="issue">Wydanie:</string>
+    <string name="loading">Ładuję…</string>
+    <string name="missing_description">Brak opisu</string>
+    <string name="page_count">Liczba stron:</string>
+    <string name="search">Szukaj…</string>
+    <string name="series">Seria</string>
+    <string name="stories">Historie</string>
+    <string name="superhero_thumbnail">Miniatura superbohatera</string>
+    <string name="unknown_year">Nieznany rok</string>
+</resources>

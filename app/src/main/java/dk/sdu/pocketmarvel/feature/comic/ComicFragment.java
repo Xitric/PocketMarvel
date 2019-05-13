@@ -81,7 +81,7 @@ public class ComicFragment extends Fragment {
                 String description = result.getResult().getDescription();
 
                 if (description == null || description.isEmpty()) {
-                    comicDescription.setText(R.string.missingDescription);
+                    comicDescription.setText(R.string.missing_description);
                 } else {
                     comicDescription.setText(description);
                 }

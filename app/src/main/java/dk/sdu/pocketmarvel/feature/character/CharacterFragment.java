@@ -53,8 +53,8 @@ public class CharacterFragment extends Fragment implements OnAdapterSelectionLis
                         .load(result.getResult().getThumbnail().getPath() + "." + result.getResult().getThumbnail().getExtension())
                         .into(characterThumbnail);
             } else if (result.getState() == NetworkStatus.Fetching) {
-                characterName.setText("Loading...");
-                characterDescription.setText("Loading...");
+                characterName.setText(R.string.loading);
+                characterDescription.setText(R.string.loading);
             }
         });
 
