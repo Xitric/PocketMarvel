@@ -19,6 +19,12 @@ public class CharacterListFragment extends MasterFragment {
     private PagedListAdapter<Character, ?> adapter;
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        adapter = new CharacterAdapter(this, Glide.with(context));
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -26,8 +32,10 @@ public class CharacterListFragment extends MasterFragment {
         viewModel.getCharactersLiveData().observe(this, characters ->
                 adapter.submitList(characters));
 
-        viewModel.getNetworkStatusLiveData().observe(this, fetchStatus ->
-                Toast.makeText(this.getContext(), fetchStatus.getMessage() == null ? fetchStatus.getState().toString() : fetchStatus.getMessage(), Toast.LENGTH_LONG).show());
+        viewModel.getNetworkStatusLiveData().observe(this, fetchStatus -> {
+            assert fetchStatus != null;
+            Toast.makeText(this.getContext(), fetchStatus.getMessage() == null ? fetchStatus.getState().toString() : fetchStatus.getMessage(), Toast.LENGTH_LONG).show();
+        });
     }
 
     @Override
@@ -38,11 +46,5 @@ public class CharacterListFragment extends MasterFragment {
     @Override
     protected void onSearch(String searchTerm) {
         viewModel.setSearchTerm(searchTerm);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        adapter = new CharacterAdapter(this, Glide.with(this));
     }
 }

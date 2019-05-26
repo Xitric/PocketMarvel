@@ -2,7 +2,6 @@ package dk.sdu.pocketmarvel.repository.api;
 
 import dk.sdu.pocketmarvel.vo.Character;
 import dk.sdu.pocketmarvel.vo.Comic;
-import dk.sdu.pocketmarvel.vo.Event;
 import dk.sdu.pocketmarvel.vo.MarvelDataWrapper;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -18,9 +17,6 @@ public interface MarvelService {
 
     @GET("v1/public/characters/{id}")
     Call<MarvelDataWrapper<Character>> getCharacter(@Path("id") int id);
-
-    @GET("v1/public/events")
-    Call<MarvelDataWrapper<Event>> getEvent(@Query("name") String name);
 
     @GET("v1/public/comics")
     Call<MarvelDataWrapper<Comic>> getComics(@Query("titleStartsWith") String namePrefix,

@@ -26,5 +26,4 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ComicActivity.class);
         startActivity(intent);
     }
-
 }

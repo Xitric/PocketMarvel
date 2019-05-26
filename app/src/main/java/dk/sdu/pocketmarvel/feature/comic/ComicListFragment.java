@@ -25,6 +25,12 @@ public class ComicListFragment extends MasterFragment {
     private PagedListAdapter<Comic, ?> adapter;
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        adapter = new ComicAdapter(this, Glide.with(context));
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -32,8 +38,10 @@ public class ComicListFragment extends MasterFragment {
         viewModel.getComicsLiveData().observe(this, comics ->
                 adapter.submitList(comics));
 
-        viewModel.getNetworkStatusLiveData().observe(this, fetchStatus ->
-                Toast.makeText(this.getContext(), fetchStatus.getMessage() == null ? fetchStatus.getState().toString() : fetchStatus.getMessage(), Toast.LENGTH_LONG).show());
+        viewModel.getNetworkStatusLiveData().observe(this, fetchStatus -> {
+            assert fetchStatus != null;
+            Toast.makeText(this.getContext(), fetchStatus.getMessage() == null ? fetchStatus.getState().toString() : fetchStatus.getMessage(), Toast.LENGTH_LONG).show();
+        });
     }
 
     @Override
@@ -44,12 +52,6 @@ public class ComicListFragment extends MasterFragment {
     @Override
     protected void onSearch(String searchTerm) {
         viewModel.setSearchTerm(searchTerm);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        adapter = new ComicAdapter(this, Glide.with(this));
     }
 
     @Override

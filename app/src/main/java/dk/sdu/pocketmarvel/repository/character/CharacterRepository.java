@@ -47,7 +47,7 @@ public class CharacterRepository {
 
         CharacterBoundaryCallback boundaryCallback = new CharacterBoundaryCallback(marvelDatabase, pagedConfig.pageSize);
 
-        LiveData<PagedList<Character>> pagedListLiveData = new LivePagedListBuilder<>(marvelDatabase.characterDao().allUsers(), pagedConfig)
+        LiveData<PagedList<Character>> pagedListLiveData = new LivePagedListBuilder<>(marvelDatabase.characterDao().getAllUsers(), pagedConfig)
                 .setFetchExecutor(fetchExecutor)
                 .setBoundaryCallback(boundaryCallback)
                 .build();
@@ -59,7 +59,7 @@ public class CharacterRepository {
         return new SingularDataFetcher<Character>(MarvelExecutors.getInstance()) {
             @Override
             protected LiveData<Character> fetchFromDb() {
-                return marvelDatabase.characterDao().load(id);
+                return marvelDatabase.characterDao().getUser(id);
             }
 
             @Override

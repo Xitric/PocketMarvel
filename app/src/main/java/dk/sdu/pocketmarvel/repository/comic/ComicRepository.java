@@ -54,7 +54,7 @@ public class ComicRepository {
 
         ComicBoundaryCallback boundaryCallback = new ComicBoundaryCallback(marvelDatabase, pagedConfig.pageSize);
 
-        LiveData<PagedList<Comic>> pagedListLiveData = new LivePagedListBuilder<>(marvelDatabase.comicDao().allComics(), pagedConfig)
+        LiveData<PagedList<Comic>> pagedListLiveData = new LivePagedListBuilder<>(marvelDatabase.comicDao().getAllComics(), pagedConfig)
                 .setFetchExecutor(fetchExecutor)
                 .setBoundaryCallback(boundaryCallback)
                 .build();
@@ -66,7 +66,7 @@ public class ComicRepository {
         return new SingularDataFetcher<Comic>(MarvelExecutors.getInstance()) {
             @Override
             protected LiveData<Comic> fetchFromDb() {
-                return Transformations.map(marvelDatabase.comicDao().load(comicId), comicWithImages -> {
+                return Transformations.map(marvelDatabase.comicDao().getComic(comicId), comicWithImages -> {
                     if (comicWithImages == null) {
                         return null;
                     } else {

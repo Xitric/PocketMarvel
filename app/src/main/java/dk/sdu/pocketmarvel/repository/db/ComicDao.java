@@ -58,10 +58,10 @@ public abstract class ComicDao {
 
     @Transaction
     @Query("SELECT * FROM Comic WHERE Comic.id = :comicId")
-    public abstract LiveData<ComicWithImages> load(int comicId);
+    public abstract LiveData<ComicWithImages> getComic(int comicId);
 
     @Query("SELECT * FROM Comic ORDER BY Comic.title")
-    public abstract DataSource.Factory<Integer, Comic> allComics();
+    public abstract DataSource.Factory<Integer, Comic> getAllComics();
 
     @Query("SELECT COUNT(*) FROM Comic")
     public abstract int getNumberOfComics();

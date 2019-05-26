@@ -45,10 +45,10 @@ public abstract class CharacterDao {
     }
 
     @Query("SELECT * FROM Character WHERE id = :characterId")
-    public abstract LiveData<Character> load(int characterId);
+    public abstract LiveData<Character> getUser(int characterId);
 
     @Query("SELECT * FROM Character ORDER BY Character.name")
-    public abstract DataSource.Factory<Integer, Character> allUsers();
+    public abstract DataSource.Factory<Integer, Character> getAllUsers();
 
     @Query("SELECT COUNT(*) FROM Character")
     public abstract int getNumberOfCharacters();
