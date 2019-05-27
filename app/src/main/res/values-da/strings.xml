@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="characters">Karakterer</string>
+    <string name="comics">Tegneserier</string>
+    <string name="creators">Skabere</string>
+    <string name="events">Hændelser</string>
+    <string name="issue">Udgave:</string>
+    <string name="loading">Indlæser…</string>
+    <string name="missing_description">Beskrivelse mangler</string>
+    <string name="page_count">Sidetal:</string>
+    <string name="search">Søg…</string>
+    <string name="series">Serier</string>
+    <string name="stories">Historier</string>
+    <string name="superhero_thumbnail">Superhelteminiature</string>
+    <string name="unknown_year">Ukendt årstal</string>
+</resources>

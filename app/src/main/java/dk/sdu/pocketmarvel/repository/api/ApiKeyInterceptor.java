@@ -22,6 +22,7 @@ public class ApiKeyInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
+        //Add API key information to all outgoing requests
         long time = getTimeStamp();
         String hash = generateHash(time);
 
